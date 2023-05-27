@@ -1,3 +1,6 @@
+using Chef_API.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Chef_API
 {
     public class Program
@@ -12,6 +15,9 @@ namespace Chef_API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContextPool<ChefDBContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("ChefConnection"))
+            );
 
             var app = builder.Build();
 
