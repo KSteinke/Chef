@@ -17,7 +17,7 @@ namespace Chef_API
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContextPool<ChefDBContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("ChefConnection"))
-            );
+            ); //Database connection, DbContext initial config
 
             var app = builder.Build();
 
