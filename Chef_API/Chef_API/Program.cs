@@ -1,5 +1,8 @@
 using Chef_API.Data;
+using Chef_API.Repositories;
+using Chef_API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 
 namespace Chef_API
 {
@@ -18,7 +21,7 @@ namespace Chef_API
             builder.Services.AddDbContextPool<ChefDBContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("ChefConnection"))
             ); //Database connection, DbContext initial config
-
+            builder.Services.AddScoped<IRecipeRepository, RecipeRepository>(); //Dependency Injection configuration for RecipeRepositories
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -28,6 +31,7 @@ namespace Chef_API
                 app.UseSwaggerUI();
             }
 
+            app.UseCors(policy => policy.WithOrigins("http://localhost:7093", "https://localhost:7093").AllowAnyMethod().WithHeaders(HeaderNames.ContentType));
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
