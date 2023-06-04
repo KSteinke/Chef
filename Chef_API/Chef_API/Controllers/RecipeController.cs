@@ -25,18 +25,15 @@ namespace Chef_API.Controllers
                 if(recipes == null)
                 {
                     return NotFound();
-                    
                 }
                 else
                 {
                     var recipesDto = recipes.ConvertoToDto();
-                    
                     return Ok(recipesDto);
                 }
             }
             catch (Exception)
             {
-
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
         }
