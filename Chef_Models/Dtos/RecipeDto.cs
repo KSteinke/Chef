@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Chef_Models.Dtos
 {
@@ -17,5 +19,7 @@ namespace Chef_Models.Dtos
         public string? Diet_Category { get; set; }
         public string? RecipePhotoURL { get; set; }
         public string Author { get; set; }
+        public IFormFile? RecipeImg { get; set; }
+
     }
 }

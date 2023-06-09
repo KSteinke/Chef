@@ -36,6 +36,7 @@ namespace Chef_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
+            
         }
     }
 }
