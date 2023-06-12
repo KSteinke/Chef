@@ -1,10 +1,12 @@
 ﻿using Chef_API.Entities;
 using Chef_Models.Dtos;
+using System.Configuration;
 
 namespace Chef_API.Extentions
 {
     public static class DtoConvertions
     {
+        
         /// <summary>
         /// Converts IEnumerable that cointains Recipe objects to IEnumerable that contains RecipeDto objects
         /// </summary>
@@ -39,12 +41,9 @@ namespace Chef_API.Extentions
         {
             try
             {
-                //using(var stream = File.OpenRead(imgUrl))
-                //{
-                //    return new FormFile(stream, 0, stream.Length, "test", Path.GetFileName(stream.Name));
-                //}
+                string recipeImgPath = Path.Combine(Config.RecipeImgPath, imgUrl);
 
-                using (var fileStream = new FileStream(imgUrl, FileMode.Open, FileAccess.Read))
+                using (var fileStream = new FileStream(recipeImgPath, FileMode.Open, FileAccess.Read))
                 {
                     // Create a MemoryStream to hold the file data
                     var memoryStream = new MemoryStream();
