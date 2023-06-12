@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chef_API", "Chef_API\Chef_API.csproj", "{7F9458E6-1B1F-449E-AE84-780B9B5E6E39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chef_API", "Chef_API\Chef_API.csproj", "{7F9458E6-1B1F-449E-AE84-780B9B5E6E39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chef_Models", "..\Chef_Models\Chef_Models.csproj", "{39B0FD10-0913-475E-A774-997959E97FB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chef_Models", "..\Chef_Models\Chef_Models.csproj", "{39B0FD10-0913-475E-A774-997959E97FB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chef_Web", "..\Chef_Web\Chef_Web.csproj", "{8F606931-7CE6-4CED-88D9-27DFE28997B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chef_Web", "..\Chef_Web\Chef_Web.csproj", "{8F606931-7CE6-4CED-88D9-27DFE28997B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

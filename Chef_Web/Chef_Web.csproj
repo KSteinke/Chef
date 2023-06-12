@@ -15,4 +15,8 @@
     <Folder Include="wwwroot\RecipeImagesDebug\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Chef_Models\Chef_Models.csproj" />
+  </ItemGroup>
+
 </Project>

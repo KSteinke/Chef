@@ -1,4 +1,6 @@
 using Chef_Web;
+using Chef_Web.Services;
+using Chef_Web.Services.Contracts;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -13,6 +15,7 @@ namespace Chef_Web
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped<IRecipeService, RecipeService>();
 
             await builder.Build().RunAsync();
         }
