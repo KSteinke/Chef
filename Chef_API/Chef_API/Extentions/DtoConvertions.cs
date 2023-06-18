@@ -1,6 +1,7 @@
 ﻿using Chef_API.Entities;
 using Chef_Models.Dtos;
 using System.Configuration;
+using System.IO;
 
 namespace Chef_API.Extentions
 {
@@ -14,10 +15,10 @@ namespace Chef_API.Extentions
         /// <returns></returns>
         public static IEnumerable<RecipeDto> ConvertoToDto(this IEnumerable<Recipe> recipies)
         {
-            IEnumerable<RecipeDto> recipesDto = new List<RecipeDto>();
+            //IEnumerable<RecipeDto> recipesDto = new List<RecipeDto>();
 
 
-            recipesDto =  (from recipe in recipies
+            IEnumerable<RecipeDto> recipesDto =  (from recipe in recipies
                     select new RecipeDto
                     {
                         Id = recipe.Id,
@@ -29,10 +30,12 @@ namespace Chef_API.Extentions
                         RecipePhotoURL = recipe.RecipePhotoURL,
                         Author = recipe.Category
                     }).ToList();
-            foreach(RecipeDto recipe in recipesDto)
-            {
-                recipe.RecipeImg = ReadImg(recipe.RecipePhotoURL);
-            }
+            //foreach(RecipeDto recipe in recipesDto)
+            //{
+            //    //recipe.RecipeImg = ReadImg(recipe.RecipePhotoURL);
+            //    //recipe.RecipeImg = ReadImgMultipart(recipe.RecipePhotoURL);
+            //    recipe.RecipeImg = ReadImgByte(recipe.RecipePhotoURL);
+            //}
             return recipesDto;
             
         }
@@ -76,5 +79,65 @@ namespace Chef_API.Extentions
                 throw;
             }
         }
+
+        public static MultipartFormDataContent ReadImgMultipart(string imgUrl)
+        {
+            try
+            {
+                string recipeImgPath = Path.Combine(Config.RecipeImgPath, imgUrl);
+
+                using (var fileStream = new FileStream(recipeImgPath, FileMode.Open, FileAccess.Read))
+                {
+                    //using (var content = new MultipartFormDataContent())
+                    //{
+                        var fileName = Path.GetFileName(recipeImgPath);
+
+                    HttpContent httpContent = new StreamContent(fileStream);
+                    
+
+                    var content = new MultipartFormDataContent();
+                    
+                    //content.Add(new StreamContent(fileStream), "file", fileName);
+                    content.Add(
+                    content: httpContent,
+                    name: "\"files\"",
+                    fileName: fileName);
+
+                    return content;
+                        
+                    //}
+                    
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+
+        public static byte[] ReadImgByte(string imgUrl)
+        {
+            try
+            {
+                string recipeImgPath = Path.Combine(Config.RecipeImgPath, imgUrl);
+                byte[] content = File.ReadAllBytes(recipeImgPath);
+                return content;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+
+
     }
 }

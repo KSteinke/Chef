@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 
 namespace Chef_Web.Services
 {
-    public class RecipeService : IRecipeService
+    public class RecipeService:IRecipeService
     {
         private readonly HttpClient httpClient;
 
@@ -16,6 +16,7 @@ namespace Chef_Web.Services
         {
             try
             {
+
                 var response = await this.httpClient.GetAsync("api/Recipe");
                 if (response.IsSuccessStatusCode)
                 {
@@ -23,7 +24,9 @@ namespace Chef_Web.Services
                     {
                         return Enumerable.Empty<RecipeDto>();
                     }
-                    return await response.Content.ReadFromJsonAsync<IEnumerable<RecipeDto>>();
+                    var x = await response.Content.ReadFromJsonAsync<IEnumerable<RecipeDto>>();
+                    
+                    return x;
                 }
                 else
                 {

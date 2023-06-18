@@ -16,10 +16,11 @@ namespace Chef_Models.Dtos
         public string Description { get; set; }
         public string Category { get; set; }
         public bool LunchBox { get; set; }
-        public string? Diet_Category { get; set; }
-        public string? RecipePhotoURL { get; set; }
+        public string Diet_Category { get; set; }
+        public string RecipePhotoURL { get; set; }
         public string Author { get; set; }
-        public IFormFile? RecipeImg { get; set; }
-
+        //public IFormFile? RecipeImg { get; set; }
+        //public MultipartFormDataContent RecipeImg { get; set; }
+        //public byte[] RecipeImg { get; set; }
     }
 }
