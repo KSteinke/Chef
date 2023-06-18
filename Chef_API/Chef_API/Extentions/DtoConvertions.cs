@@ -1,7 +1,9 @@
 ﻿using Chef_API.Entities;
 using Chef_Models.Dtos;
+using Microsoft.AspNetCore.Mvc;
 using System.Configuration;
 using System.IO;
+using System.Net.Mime;
 
 namespace Chef_API.Extentions
 {
@@ -30,12 +32,12 @@ namespace Chef_API.Extentions
                         RecipePhotoURL = recipe.RecipePhotoURL,
                         Author = recipe.Category
                     }).ToList();
-            //foreach(RecipeDto recipe in recipesDto)
-            //{
-            //    //recipe.RecipeImg = ReadImg(recipe.RecipePhotoURL);
-            //    //recipe.RecipeImg = ReadImgMultipart(recipe.RecipePhotoURL);
-            //    recipe.RecipeImg = ReadImgByte(recipe.RecipePhotoURL);
-            //}
+            foreach (RecipeDto recipe in recipesDto)
+            {
+                //recipe.RecipeImg = ReadImg(recipe.RecipePhotoURL);
+                //recipe.RecipeImg = ReadImgMultipart(recipe.RecipePhotoURL);
+                recipe.RecipeImgBase64 = ReadImgByte(recipe.RecipePhotoURL);
+            }
             return recipesDto;
             
         }
@@ -120,13 +122,15 @@ namespace Chef_API.Extentions
         }
 
 
-        public static byte[] ReadImgByte(string imgUrl)
+        public static string ReadImgByte(string imgUrl)
         {
             try
             {
                 string recipeImgPath = Path.Combine(Config.RecipeImgPath, imgUrl);
-                byte[] content = File.ReadAllBytes(recipeImgPath);
-                return content;
+                byte[] recipeImgBytes = File.ReadAllBytes(recipeImgPath);
+                string recipeImgBase64 = Convert.ToBase64String(recipeImgBytes, 0, recipeImgBytes.Length);
+                //File.WriteAllBytes("D:\\Programowanie\\Chef\\Images_Tests\\Test.jpg", Convert.FromBase64String(recipeImgBase64));
+                return recipeImgBase64;
 
             }
             catch (Exception)

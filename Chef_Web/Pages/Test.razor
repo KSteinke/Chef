@@ -1,7 +1,7 @@
 ﻿@page "/Test"
 @using Chef_Web.Services.Contracts;
 @using Chef_Models.Dtos
-
+@inject IJSRuntime Js
 
 @if (Recipes == null)
 {
@@ -16,8 +16,9 @@ else
     {
         foreach (var recipe in Recipes)
         {
-            <div class="row mt-3">
-                @*<img src=@Convert.ToBase64String(recipe.RecipeImg)>*@
+            <div>
+                            <img src="@($"data:image/png;base64,{recipe.RecipeImgBase64}")" alt="Image" width="550" height="550"/>
+                @*<img src=@Js.InvokeVoidAsync("createImageURL", recipe.RecipeImgBase64);>*@
             </div>
             <hr class="mb-3" />
         }
@@ -28,6 +29,7 @@ else
 }
 
 @code {
+
     [Inject]
     public IRecipeService recipeService { get; set; }
 
@@ -41,6 +43,7 @@ else
         {
             Recipes = await recipeService.GetRecipes();
 
+            
         }
         catch (Exception ex)
         {

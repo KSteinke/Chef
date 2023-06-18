@@ -22,5 +22,6 @@ namespace Chef_Models.Dtos
         //public IFormFile? RecipeImg { get; set; }
         //public MultipartFormDataContent RecipeImg { get; set; }
         //public byte[] RecipeImg { get; set; }
+        public string RecipeImgBase64 { get; set; }
     }
 }
