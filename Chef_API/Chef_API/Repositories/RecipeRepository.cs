@@ -7,14 +7,14 @@ namespace Chef_API.Repositories
 {
     public class RecipeRepository : IRecipeRepository
     {
-        private readonly ChefDBContext chefDBContext;
+        private readonly ChefDBContext _chefDBContext;
         public RecipeRepository(ChefDBContext chefDBContext)
         {
-            this.chefDBContext = chefDBContext;
+            _chefDBContext = chefDBContext;
         }
         public async Task<IEnumerable<Recipe>> GetRecipes()
         {
-            var recipes = await this.chefDBContext.Recipes.ToListAsync();
+            var recipes = await _chefDBContext.Recipes.ToListAsync();
             return recipes;
         }
     }

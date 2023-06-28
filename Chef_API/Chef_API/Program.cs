@@ -22,6 +22,7 @@ namespace Chef_API
             options.UseSqlServer(builder.Configuration.GetConnectionString("ChefConnection"))
             ); //Database connection, DbContext initial config
             builder.Services.AddScoped<IRecipeRepository, RecipeRepository>(); //Dependency Injection configuration for RecipeRepositories
+            builder.Services.AddScoped<IChefRepository, ChefRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

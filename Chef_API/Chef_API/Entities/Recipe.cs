@@ -13,7 +13,7 @@ namespace Chef_API.Entities
         public bool LunchBox { get; set; }
         public string? Diet_Category { get; set; }
         public string? RecipePhotoURL { get; set; }
-        public string Author { get; set; }
+        public int AuthorId { get; set; }
 
     }
 }

@@ -10,10 +10,12 @@ namespace Chef_API.Controllers
     [ApiController]
     public class RecipeController : ControllerBase
     {
-        private readonly IRecipeRepository recipeRepository;
-        public RecipeController(IRecipeRepository recipeRepository)
+        private readonly IRecipeRepository _recipeRepository;
+        private readonly IChefRepository _chefRepository;
+        public RecipeController(IRecipeRepository recipeRepository, IChefRepository chefRepository)
         {
-            this.recipeRepository = recipeRepository;
+            _recipeRepository = recipeRepository;
+            _chefRepository = chefRepository;
         }
 
         [HttpGet]
@@ -21,14 +23,15 @@ namespace Chef_API.Controllers
         {
             try
             {
-                var recipes = await this.recipeRepository.GetRecipes();
+                var recipes = await _recipeRepository.GetRecipes();
+                var chefs = await _chefRepository.GetChefs();
                 if(recipes == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    var recipesDto = recipes.ConvertoToDto();
+                    var recipesDto = recipes.ConvertoToDto(chefs);
                     return Ok(recipesDto);
                 }
             }

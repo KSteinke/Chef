@@ -11,6 +11,7 @@ namespace Chef_API.Data
         }
 
         public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<Chef> Chefs { get; set; }
         
     }
 }

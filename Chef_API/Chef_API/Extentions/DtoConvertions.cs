@@ -15,12 +15,15 @@ namespace Chef_API.Extentions
         /// </summary>
         /// <param name="recipies">IEnumerable list of Recipe objects</param>
         /// <returns></returns>
-        public static IEnumerable<RecipeDto> ConvertoToDto(this IEnumerable<Recipe> recipies)
+        public static IEnumerable<RecipeDto> ConvertoToDto(this IEnumerable<Recipe> recipies, IEnumerable<Chef> chefs)
         {
             //IEnumerable<RecipeDto> recipesDto = new List<RecipeDto>();
 
 
             IEnumerable<RecipeDto> recipesDto =  (from recipe in recipies
+                                                  join chef in chefs
+                                                  on recipe.AuthorId equals chef.Id
+
                     select new RecipeDto
                     {
                         Id = recipe.Id,
@@ -30,7 +33,7 @@ namespace Chef_API.Extentions
                         LunchBox = recipe.LunchBox,
                         Diet_Category = recipe.Diet_Category,
                         RecipePhotoURL = recipe.RecipePhotoURL,
-                        Author = recipe.Category
+                        AuthorName = chef.UserName
                     }).ToList();
             foreach (RecipeDto recipe in recipesDto)
             {
@@ -41,86 +44,6 @@ namespace Chef_API.Extentions
             return recipesDto;
             
         }
-
-        public static IFormFile ReadImg(string imgUrl)
-        {
-            try
-            {
-                string recipeImgPath = Path.Combine(Config.RecipeImgPath, imgUrl);
-
-                using (var fileStream = new FileStream(recipeImgPath, FileMode.Open, FileAccess.Read))
-                {
-                    // Create a MemoryStream to hold the file data
-                    var memoryStream = new MemoryStream();
-
-                    // Copy the file data from FileStream to MemoryStream
-                    fileStream.CopyTo(memoryStream);
-
-                    // Create a FormFile from the MemoryStream
-                    var formFile = new FormFile(memoryStream, 0, memoryStream.Length, null, Path.GetFileName(imgUrl))
-                    {
-                        Headers = new HeaderDictionary(),   //Important to find why it works
-                        ContentType = "image/*"
-                    };
-
-                    // Now you can use the formFile as needed
-                    // For example, you can pass it to a method that requires a FormFile parameter
-                    
-                    // Remember to dispose the MemoryStream when done
-                    
-                    
-                    memoryStream.Dispose();
-                    return formFile;
-                }
-                
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public static MultipartFormDataContent ReadImgMultipart(string imgUrl)
-        {
-            try
-            {
-                string recipeImgPath = Path.Combine(Config.RecipeImgPath, imgUrl);
-
-                using (var fileStream = new FileStream(recipeImgPath, FileMode.Open, FileAccess.Read))
-                {
-                    //using (var content = new MultipartFormDataContent())
-                    //{
-                        var fileName = Path.GetFileName(recipeImgPath);
-
-                    HttpContent httpContent = new StreamContent(fileStream);
-                    
-
-                    var content = new MultipartFormDataContent();
-                    
-                    //content.Add(new StreamContent(fileStream), "file", fileName);
-                    content.Add(
-                    content: httpContent,
-                    name: "\"files\"",
-                    fileName: fileName);
-
-                    return content;
-                        
-                    //}
-                    
-                }
-
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-        }
-
 
         public static string ReadImgByte(string imgUrl)
         {
