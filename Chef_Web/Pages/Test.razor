@@ -17,7 +17,7 @@ else
         foreach (var recipe in Recipes)
         {
             <div>
-                            <img src="@($"data:image/png;base64,{recipe.RecipeImgBase64}")" alt="Image" width="550" height="550"/>
+                            <img src="@($"data:image/png;base64,{recipe.RecipeImgBase64}")" alt="Image" width="220" height="220"/>
                 @*<img src=@Js.InvokeVoidAsync("createImageURL", recipe.RecipeImgBase64);>*@
             </div>
             <hr class="mb-3" />
