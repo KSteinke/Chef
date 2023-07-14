@@ -15,5 +15,8 @@ namespace Chef_API.Entities
         public string? RecipePhotoURL { get; set; }
         public int AuthorId { get; set; }
 
+        public ICollection<Ingredient> Ingredients { get; set;}
+        public List<RecipeIngredient> RecipeIngredients { get; set; }
+
     }
 }

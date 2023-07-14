@@ -3,6 +3,7 @@ using Chef_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chef_API.Migrations
 {
     [DbContext(typeof(ChefDBContext))]
-    partial class ChefDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230714155454_ManyToManyBasicForm")]
+    partial class ManyToManyBasicForm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,51 +105,34 @@ namespace Chef_API.Migrations
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("Chef_API.Entities.RecipeIngredient", b =>
+            modelBuilder.Entity("IngredientRecipe", b =>
                 {
-                    b.Property<int>("IngredientId")
+                    b.Property<int>("IngredientsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RecipeId")
+                    b.Property<int>("RecipesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.HasKey("IngredientsId", "RecipesId");
 
-                    b.HasKey("IngredientId", "RecipeId");
+                    b.HasIndex("RecipesId");
 
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("RecipeIngredient");
+                    b.ToTable("IngredientRecipe");
                 });
 
-            modelBuilder.Entity("Chef_API.Entities.RecipeIngredient", b =>
+            modelBuilder.Entity("IngredientRecipe", b =>
                 {
-                    b.HasOne("Chef_API.Entities.Ingredient", "Ingredient")
-                        .WithMany("RecipeIngredients")
-                        .HasForeignKey("IngredientId")
+                    b.HasOne("Chef_API.Entities.Ingredient", null)
+                        .WithMany()
+                        .HasForeignKey("IngredientsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Chef_API.Entities.Recipe", "Recipe")
-                        .WithMany("RecipeIngredients")
-                        .HasForeignKey("RecipeId")
+                    b.HasOne("Chef_API.Entities.Recipe", null)
+                        .WithMany()
+                        .HasForeignKey("RecipesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Ingredient");
-
-                    b.Navigation("Recipe");
-                });
-
-            modelBuilder.Entity("Chef_API.Entities.Ingredient", b =>
-                {
-                    b.Navigation("RecipeIngredients");
-                });
-
-            modelBuilder.Entity("Chef_API.Entities.Recipe", b =>
-                {
-                    b.Navigation("RecipeIngredients");
                 });
 #pragma warning restore 612, 618
         }
