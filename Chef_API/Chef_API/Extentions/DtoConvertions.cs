@@ -33,7 +33,8 @@ namespace Chef_API.Extentions
                         LunchBox = recipe.LunchBox,
                         Diet_Category = recipe.Diet_Category,
                         RecipePhotoURL = recipe.RecipePhotoURL,
-                        AuthorName = chef.UserName
+                        AuthorName = chef.UserName,
+                        PrepDescription = recipe.PrepDescription
                     }).ToList();
             foreach (RecipeDto recipe in recipesDto)
             {

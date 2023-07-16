@@ -3,6 +3,7 @@ using Chef_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chef_API.Migrations
 {
     [DbContext(typeof(ChefDBContext))]
-    partial class ChefDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230716113823_PrepDescription_added_to_Recipe")]
+    partial class PrepDescription_added_to_Recipe
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

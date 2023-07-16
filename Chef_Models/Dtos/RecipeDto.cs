@@ -14,6 +14,7 @@ namespace Chef_Models.Dtos
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string? PrepDescription { get; set; }
         public string Category { get; set; }
         public bool LunchBox { get; set; }
         public string Diet_Category { get; set; }
