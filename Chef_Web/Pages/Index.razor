@@ -4,14 +4,52 @@
 @using Chef_Models.Dtos;
 
 
-
+<div class="row mt-1">
+    <ul class="nav nav-pills">
+    <div class="col-md-2">
+        <div class="form-group">
+            <label for="exampleSelect1" class="form-label mt-2">Diet Category</label>
+            <select class="form-select" id="exampleSelect2" @bind="Category">
+                <option>All</option>
+                <option>Meat</option>
+                <option>Vegi</option>
+                <option>Vegan</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label for="exampleSelect1" class="form-label mt-2">Choose category</label>
+            <select class="form-select" id="exampleSelect1" @bind="Category2">
+                <option>All</option>
+                <option>Breakfast</option>
+                <option>Dinner</option>
+                <option>Supper</option>
+              </select>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" @bind="Category3">
+        <label class="form-check-label" for="flexCheckDefault">
+          Default checkbox
+        </label>
+      </div>
+    </div>
+    </ul>
+</div>
+<div class="row mt-1">
+    <h1> </h1>
+</div>
 @if (Recipes == null)
 {
     <h3 class="mb-5">Wait!</h3>
+    
 }
 else
 {
-    <h3 class="mb-5">Recipes</h3>
+    <h3 class="mb-5">Enjoy Your Cooking!</h3>
+    
     var productCount = Recipes.Count();
     <div class="row mt-3">
     
@@ -49,7 +87,9 @@ else
     public IEnumerable<RecipeDto> Recipes { get; set; }
 
     public string ErrorMessage { get; set; }
-
+    public string Category { get; set; } 
+    public string Category2 { get; set; }
+    public bool Category3 { get; set; }
     protected override async Task OnInitializedAsync()
     {
         try
