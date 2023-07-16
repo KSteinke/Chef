@@ -3,82 +3,85 @@
 @using Chef_Web.Services.Contracts;
 @using Chef_Models.Dtos;
 
-
-<div class="row mt-1">
-    <ul class="nav nav-pills">
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="exampleSelect1" class="form-label mt-2">Diet Category</label>
-            <select class="form-select" id="exampleSelect2" @bind="Category">
-                <option>All</option>
-                <option>Meat</option>
-                <option>Vegi</option>
-                <option>Vegan</option>
-            </select>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="exampleSelect1" class="form-label mt-2">Choose category</label>
-            <select class="form-select" id="exampleSelect1" @bind="Category2">
-                <option>All</option>
-                <option>Breakfast</option>
-                <option>Dinner</option>
-                <option>Supper</option>
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col-3 mx-1">
+            <div class="form-group">
+              <label for="exampleSelect1" class="form-label mt-4 text-dark">Example select</label>
+                <select class="form-select" id="exampleSelect1" @bind="Category">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
               </select>
+            </div>
+        </div>
+        <div class="col-3 mx-1">
+            <div class="form-group">
+              <label for="exampleSelect1" class="form-label mt-4">Diet Category</label>
+                <select class="form-select" id="exampleSelect1" @bind="DietCategory">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+            </div>
+        </div>
+        <div class="col mx-1">
+            <label for="exampleSelect1" class="form-label mt-4">Diet Category</label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" @bind="LunchBox">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Default checkbox
+                </label>
+            </div>
         </div>
     </div>
-    <div class="col-md-2">
-        <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" @bind="Category3">
-        <label class="form-check-label" for="flexCheckDefault">
-          Default checkbox
-        </label>
-      </div>
-    </div>
-    </ul>
 </div>
-<div class="row mt-1">
-    <h1> </h1>
-</div>
-@if (Recipes == null)
-{
-    <h3 class="mb-5">Wait!</h3>
-    
-}
-else
-{
-    <h3 class="mb-5">Enjoy Your Cooking!</h3>
-    
-    var productCount = Recipes.Count();
-    <div class="row mt-3">
-    
-    @if (productCount > 0)
+
+<div class="container-fluid my-5">
+    @if (Recipes == null)
     {
-        @foreach (var recipe in Recipes)
-        {
-            <div class="col-md-3 mb-3">
-                <div class="card mb-3">
-                    <a href="/Recipe/@recipe.Id">
-                        <h3 class="card-header">@recipe.Name</h3>
-                        <img src="@($"data:image/jpg;base64,{recipe.RecipeImgBase64}")" alt="Image" style="width: 100%;">
-                    </a>
-                    <div class="card-body">
-                        <h5 class="card-title">Chef: @recipe.AuthorName</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">@recipe.Description</p>
-                    </div>
-                    <div class="card-footer text-muted">
-                        2 days ago
-                    </div>
-                </div>
-            </div>
-        }
+        <h3 class="mb-5">Wait!</h3>
+
     }
-    
-    </div>
-}
+    else
+    {
+        <h3 class="mb-5">Enjoy Your Cooking!</h3>
+
+        var productCount = Recipes.Count();
+        <div class="row mt-3">
+
+            @if (productCount > 0)
+            {
+                @foreach (var recipe in Recipes)
+                {
+                    <div class="col-md-3 mb-3">
+                        <div class="card mb-3">
+                            <a href="/Recipe/@recipe.Id">
+                                <h3 class="card-header">@recipe.Name</h3>
+                                <img src="@($"data:image/jpg;base64,{recipe.RecipeImgBase64}")" alt="Image" style="width: 100%;">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">Chef: @recipe.AuthorName</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">@recipe.Description</p>
+                            </div>
+                            <div class="card-footer text-muted">
+                                2 days ago
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+        </div>
+    }
+</div>
+
 
 @code{
     [Inject]
@@ -88,8 +91,8 @@ else
 
     public string ErrorMessage { get; set; }
     public string Category { get; set; } 
-    public string Category2 { get; set; }
-    public bool Category3 { get; set; }
+    public string DietCategory { get; set; }
+    public bool LunchBox { get; set; }
     protected override async Task OnInitializedAsync()
     {
         try

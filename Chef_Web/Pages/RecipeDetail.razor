@@ -11,31 +11,75 @@
 }
 else
 {
-    <div class="container text-center">
-        <div class="row my-5">
-            <div class="col">
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="col-4 ">
                 <img src="@($"data:image/jpg;base64,{Recipes.First().RecipeImgBase64}")" alt="Image" style="width: 100%;">
             </div>
             <div class="col">
-                <div class="container text-left">
-                    <div class="row my-5">
+                <div class="row my-1">
+                    <div class="col">
+                        <h1>@Recipes.First().Name</h1>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col">
+                        <h4>Chef: @Recipes.First().AuthorName</h4>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col">
                         <p class="lead">@Recipes.First().Description</p>
                     </div>
-                    <div class="row my-5">
-                        <p class="lead">Chef: @Recipes.First().AuthorName</p>
+                </div>
+                <div class="row my-1">
+                    <div class="container padding-left ">
+                        <div class="row ">
+                            <div class="col">
+                                <h4>Ingredients:</h4>
+                            </div>
                         </div>
+                        @*@foreach(ingredient in Recipes.First().)*@
+                        <div class="row ">
+                            <div class="col">
+                                <p class="lead">Ingredient 1 </p>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col">
+                                <p class="lead">Ingredient 1 </p>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col">
+                                <p class="lead">Ingredient 1 </p>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col">
+                                <p class="lead">Ingredient 1 </p>
+                            </div>
+                        </div>
+
+
+                        <div class="row ">
+                            <div class="col">
+                                <h4>Preparation:</h4>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col">
+                                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae metus nisi. Duis facilisis orci ac ipsum egestas, ut placerat sem mollis. Sed sagittis, erat et pretium dignissim, lorem mauris varius est, id tincidunt orci quam eget augue. Vestibulum non tortor in dolor venenatis pretium a non lorem. Quisque nisl dui, ultricies ut dui et, venenatis molestie odio. Proin nec euismod tortor, nec sodales ligula. Suspendisse iaculis nibh ut leo pharetra, ac dapibus arcu placerat. Duis ac sagittis ligula. Cras tempor fringilla justo, rutrum scelerisque dui convallis non. Vivamus eget pharetra magna.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row my-5">
-            <div class="col">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae metus nisi. Duis facilisis orci ac ipsum egestas, ut placerat sem mollis. Sed sagittis, erat et pretium dignissim, lorem mauris varius est, id tincidunt orci quam eget augue. Vestibulum non tortor in dolor venenatis pretium a non lorem. Quisque nisl dui, ultricies ut dui et, venenatis molestie odio. Proin nec euismod tortor, nec sodales ligula. Suspendisse iaculis nibh ut leo pharetra, ac dapibus arcu placerat. Duis ac sagittis ligula. Cras tempor fringilla justo, rutrum scelerisque dui convallis non. Vivamus eget pharetra magna.
-            </div>
-            <div class="col">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae metus nisi. Duis facilisis orci ac ipsum egestas, ut placerat sem mollis. Sed sagittis, erat et pretium dignissim, lorem mauris varius est, id tincidunt orci quam eget augue. Vestibulum non tortor in dolor venenatis pretium a non lorem. Quisque nisl dui, ultricies ut dui et, venenatis molestie odio. Proin nec euismod tortor, nec sodales ligula. Suspendisse iaculis nibh ut leo pharetra, ac dapibus arcu placerat. Duis ac sagittis ligula. Cras tempor fringilla justo, rutrum scelerisque dui convallis non. Vivamus eget pharetra magna.
-            </div>
-        </div>
     </div>
+    
+    
+
 }
 @code {
 
