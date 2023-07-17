@@ -1,0 +1,40 @@
+﻿@page "/Login"
+@layout NoNavMenu
+<div class="container ">
+    <div class="row mx-5">
+        <div class="col mx-5">
+            <div class="card mb-4">
+                <p class="card-header">Login to your account</p>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group">
+                          <label for="exampleUsername1" class="form-label mt-4">Username:</label>
+                            <input type="email" class="form-control" id="exampleUsername1" aria-describedby="emailHelp" placeholder="Enter Username">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="row my-4">
+                        <div class="col-2">
+                            <button type="button" class="btn btn-secondary btn-outline-dark">Login</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <a href="/Register">
+                        <p>Don't have an account? Register Here!</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+}
