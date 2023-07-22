@@ -33,14 +33,11 @@ namespace Chef_API.Repositories
            {
                 return false;
            }
-           else 
+           else if ((from chef in _chefDBContext.Chefs
+                     where chef.UserName == chefCredentials.UserName
+                     select chef.Password).Single() != chefCredentials.Password)
            {
-                if((from chef in _chefDBContext.Chefs 
-                    where chef.UserName == chefCredentials.UserName 
-                    select chef.Password).Single() != chefCredentials.Password)
-                {
-                    return false;
-                }
+                return false;
            }
            return true;
         }

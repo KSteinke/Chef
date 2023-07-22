@@ -14,24 +14,27 @@ namespace Chef_API.Controllers
         private readonly IChefRepository _chefRepository;
         private readonly ITokenManager _tokenManager;
 
-        public LoginController(IChefRepository chefRepository)
+        public LoginController(IChefRepository chefRepository, ITokenManager tokenManager)
         {
             _chefRepository = chefRepository;
+            _tokenManager = tokenManager;
         }
 
         [HttpPost]
         [Route ("/Login")]
-        public async Task<ActionResult<string>> Login([FromBody] LoginDto userCredentials)
+        public async Task<IActionResult> Login([FromBody] LoginDto userCredentials)
         {
             try
             {
                 if(! await _chefRepository.veryfiLoginCredentials(userCredentials))  //TODO - refactor veryfiLoginCredentials Method that it will return Chef model based on given credentials. Then generate token based on them. If chef doesn't exist in db return null.
                 {
-                    return Unauthorized();
+                    ModelState.AddModelError("Unauthorized", "You are not authorized");
+                    return Unauthorized(ModelState);
                 }
                 else
                 {
-                    return  _tokenManager.GenerateToken();
+                    
+                    return  Ok(new { Token = _tokenManager.GenerateToken(userCredentials.UserName) });
                 }
             }
             catch (Exception)

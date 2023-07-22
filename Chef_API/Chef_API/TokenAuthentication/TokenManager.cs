@@ -1,7 +1,9 @@
 ﻿using Chef_API.TokenAuthentication.Interfaces;
+using Chef_Models.Dtos;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace Chef_API.TokenAuthentication
 {
@@ -20,11 +22,11 @@ namespace Chef_API.TokenAuthentication
         /// Generates new JWT
         /// </summary>
         /// <returns></returns>
-        public string GenerateToken()
+        public string GenerateToken(string userName)
         {
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[] {new Claim(ClaimTypes.Name, "XXXX - Here user info!")}), //TODO - add registration featuers
+                Subject = new ClaimsIdentity(new Claim[] {new Claim(ClaimTypes.Name, userName)}), //TODO - add registration featuers
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(secretKey),
