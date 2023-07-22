@@ -11,13 +11,14 @@ namespace Chef_API.TokenAuthentication
     {
         private JwtSecurityTokenHandler _tokenHandler;
         private byte[] secretKey;
-        
 
+        byte[] x = Config.JwtTokenKey;
         public TokenManager()
         {
             
             _tokenHandler = new JwtSecurityTokenHandler();
-            secretKey = Encoding.ASCII.GetBytes("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+            //secretKey = Encoding.ASCII.GetBytes("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+            secretKey = x;
         }
 
         /// <summary>

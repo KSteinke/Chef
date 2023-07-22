@@ -33,8 +33,7 @@ namespace Chef_API
                 o.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    //IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetValue<byte[]>("TokenKeys:JwtTokenKey"))),
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Config.JwtTokenKey),
                     ValidateLifetime = true,
                     ValidateAudience = false,
                     ValidateIssuer = false,
