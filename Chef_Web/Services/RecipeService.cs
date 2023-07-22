@@ -6,18 +6,18 @@ namespace Chef_Web.Services
 {
     public class RecipeService:IRecipeService
     {
-        private readonly HttpClient httpClient;
+        private readonly HttpClient _httpClient;
 
         public RecipeService(HttpClient httpClient)
         {
-            this.httpClient = httpClient;
+            this._httpClient = httpClient;
         }
         public async Task<IEnumerable<RecipeDto>> GetRecipes()
         {
             try
             {
 
-                var response = await this.httpClient.GetAsync("api/Recipe");
+                var response = await this._httpClient.GetAsync("api/v1/Recipe");
                 if (response.IsSuccessStatusCode)
                 {
                     if (response.StatusCode == System.Net.HttpStatusCode.NoContent)

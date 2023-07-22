@@ -1,55 +1,7 @@
-﻿@page "/"
-@layout NoNavMenu;
-@using Chef_Web.Services.Contracts;
+﻿@page "/Profile"
 @using Chef_Models.Dtos;
-
-<div class="container-fluid border-secondary">
-    <div class="row">
-        <div class="col-1 ">
-            <label for="exampleSelect1" class="form-label mt-4 text-dark">Category</label>
-        </div>
-        <div class="col-2 col-lg my-3">
-            <div class="form-group">
-                <select class="form-select" id="exampleSelect1" @bind="Category">
-                    <option>All</option>
-                    <option>Breakfasts</option>
-                    <option>Dinners</option>
-                    <option>Suppers</option>
-                    <option>Snacks</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-1">
-
-        </div>
-        <div class="col-1">
-            <label for="exampleSelect1" class="form-label mt-4">Diet Category</label>
-        </div>
-        <div class="col-2 my-3 border-right-">
-            <div class="form-group">
-                <select class="form-select" id="exampleSelect1" @bind="DietCategory">
-                    <option>All</option>
-                    <option>Meat</option>
-                    <option>Vegetarian</option>
-                    <option>Vegan</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-1">
-        </div>
-        <div class="col-2 my-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" @bind="LunchBox">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Lunchbox suitable
-                </label>
-            </div>
-        </div>
-        <div class="col my-3">
-            <button type="button" class="btn btn-dark ">Refresh</button>
-        </div>
-    </div>
-</div>
+@using Chef_Web.Services.Contracts;
+@layout NoNavMenu;
 
 
 <div class="container-fluid my-5">
@@ -94,14 +46,18 @@
 </div>
 
 
-@code{
+
+
+
+
+@code {
     [Inject]
     public IRecipeService recipeService { get; set; }
 
     public IEnumerable<RecipeDto> Recipes { get; set; }
 
     public string ErrorMessage { get; set; }
-    public string Category { get; set; } 
+    public string Category { get; set; }
     public string DietCategory { get; set; }
     public bool LunchBox { get; set; }
     protected override async Task OnInitializedAsync()
@@ -116,6 +72,4 @@
         }
 
     }
-
-
 }
