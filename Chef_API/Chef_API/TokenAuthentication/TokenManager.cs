@@ -9,13 +9,15 @@ namespace Chef_API.TokenAuthentication
 {
     public class TokenManager : ITokenManager
     {
-        private JwtSecurityTokenHandler tokenHandler;
-        private byte[] secretKey = Config.JwtTokenKey;
+        private JwtSecurityTokenHandler _tokenHandler;
+        private byte[] secretKey;
+        
 
         public TokenManager()
         {
-            tokenHandler = new JwtSecurityTokenHandler();
             
+            _tokenHandler = new JwtSecurityTokenHandler();
+            secretKey = Encoding.ASCII.GetBytes("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
         }
 
         /// <summary>
@@ -33,8 +35,8 @@ namespace Chef_API.TokenAuthentication
                     SecurityAlgorithms.HmacSha256Signature)
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var jwtString = tokenHandler.WriteToken(token);
+            var token = _tokenHandler.CreateToken(tokenDescriptor);
+            var jwtString = _tokenHandler.WriteToken(token);
             return jwtString;
         }
 

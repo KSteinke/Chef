@@ -26,7 +26,7 @@ namespace Chef_API.Controllers
         {
             try
             {
-                if(! await _chefRepository.veryfiLoginCredentials(userCredentials))  //TODO - refactor veryfiLoginCredentials Method that it will return Chef model based on given credentials. Then generate token based on them. If chef doesn't exist in db return null.
+                if(! await _chefRepository.veryfiLoginCredentials(userCredentials))  
                 {
                     ModelState.AddModelError("Unauthorized", "You are not authorized");
                     return Unauthorized(ModelState);
@@ -34,7 +34,7 @@ namespace Chef_API.Controllers
                 else
                 {
                     
-                    return  Ok(new { Token = _tokenManager.GenerateToken(userCredentials.UserName) });
+                    return  Ok(new { Token = _tokenManager.GenerateToken(userCredentials.UserName) }); //sending ok with token inside
                 }
             }
             catch (Exception)
