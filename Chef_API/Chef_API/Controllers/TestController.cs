@@ -15,7 +15,7 @@ namespace Chef_API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult> Get()
         {
             return Ok();
         }

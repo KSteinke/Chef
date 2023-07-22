@@ -18,6 +18,8 @@ namespace Chef_Web
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:44355/") });
             builder.Services.AddScoped<IRecipeService, RecipeService>();
             builder.Services.AddScoped<ICookieManager, CookieManager>();
+            builder.Services.AddScoped<IButtonTestService, ButtonTestService>();
+            
 
             await builder.Build().RunAsync();
         }

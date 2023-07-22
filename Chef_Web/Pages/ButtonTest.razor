@@ -12,12 +12,17 @@
 
 
 @code {
+    //[Inject]
+    //public ICookieManager _cookieManager {get; set;}
     [Inject]
-    public ICookieManager _cookieManager {get; set;}
+    public IButtonTestService buttonTestService { get; set; }
+
     public bool clicked = false;
-    public void GenerateCookie()
+    public async void GenerateCookie()
     {
-        _cookieManager.SetValueAsync("Test", "Test");
+
+        await buttonTestService.ButtonTest();
+        //_cookieManager.SetValueAsync("Test", "Test");
         //response = await _jsRuntime.InvokeVoidAsync("set", key, value);
         clicked = true;
     }

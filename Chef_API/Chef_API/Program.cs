@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 
 namespace Chef_API
 {
@@ -28,6 +29,9 @@ namespace Chef_API
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddCookie(x =>
+            {
+                x.Cookie.Name = "Token";
             }).AddJwtBearer(o =>
             {
                 o.TokenValidationParameters = new TokenValidationParameters
@@ -39,6 +43,14 @@ namespace Chef_API
                     ValidateIssuer = false,
                     ClockSkew = TimeSpan.Zero
 
+                };
+                o.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies["Token"];
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
@@ -65,6 +77,7 @@ namespace Chef_API
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
 

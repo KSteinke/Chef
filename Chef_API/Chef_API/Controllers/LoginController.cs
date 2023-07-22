@@ -4,6 +4,7 @@ using Chef_API.TokenAuthentication.Interfaces;
 using Chef_Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace Chef_API.Controllers
 {
@@ -33,8 +34,11 @@ namespace Chef_API.Controllers
                 }
                 else
                 {
-                    
-                    return  Ok(new { Token = _tokenManager.GenerateToken(userCredentials.UserName) }); //sending ok with token inside
+                    var token = _tokenManager.GenerateToken(userCredentials.UserName);
+                    //return  Ok(new { Token = _tokenManager.GenerateToken(userCredentials.UserName) }); //sending ok with token inside
+                    Response.Cookies.Append("Token", token, new CookieOptions { HttpOnly = true, Secure = true });
+                    return Ok();
+
                 }
             }
             catch (Exception)
