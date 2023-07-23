@@ -30,10 +30,10 @@ namespace Chef_Web.Services
         }
 
 
-        public async Task<T> GetValueAsync<T>(string key)
+        public async Task<string> GetValueAsync(string key)
         {
             await WaitForReference();
-            var result = await _accessorJsRef.Value.InvokeAsync<T>("get", key);
+            var result = await _accessorJsRef.Value.InvokeAsync<string>("get", key);
 
             return result;
         }

@@ -1,0 +1,24 @@
+﻿@inject NavigationManager UriHelper
+@page "/UserAccount"
+@page "/UserAccount/{UserName}"
+@layout NoNavMenu
+
+
+<h3>UserAccount page!</h3>
+<h3>@UserName Welcome to you bardzo glad!</h3>
+
+@code {
+    [Inject]
+    public ISiteState _siteState { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if(_siteState.UserLogged != true)
+        {
+            UriHelper.NavigateTo("Login");
+        }
+    }
+}

@@ -4,7 +4,9 @@ using Chef_API.TokenAuthentication.Interfaces;
 using Chef_Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
+using System.Net;
 
 namespace Chef_API.Controllers
 {
@@ -20,9 +22,15 @@ namespace Chef_API.Controllers
             _chefRepository = chefRepository;
             _tokenManager = tokenManager;
         }
-
+        /// <summary>
+        /// Api end point for login function,
+        /// user credentials check
+        /// if passed token is generated
+        /// </summary>
+        /// <param name="userCredentials"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Route ("/Login")]
+        [Route ("/api/v1/Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto userCredentials)
         {
             try
@@ -35,10 +43,10 @@ namespace Chef_API.Controllers
                 else
                 {
                     var token = _tokenManager.GenerateToken(userCredentials.UserName);
-                    //return  Ok(new { Token = _tokenManager.GenerateToken(userCredentials.UserName) }); //sending ok with token inside
-                    Response.Cookies.Append("Token", token, new CookieOptions { HttpOnly = true, Secure = true });
-                    return Ok();
-
+                    //Response.Cookies.Append("Token", token, new CookieOptions { HttpOnly = true, Secure = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None });
+                   //Response.Cookies.Append("User", userCredentials.UserName, new CookieOptions { HttpOnly = false, Secure = false, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None });
+                    
+                    return Ok(token);
                 }
             }
             catch (Exception)
@@ -47,5 +55,8 @@ namespace Chef_API.Controllers
                 throw;
             }
         }
+
+
+       
     }
 }

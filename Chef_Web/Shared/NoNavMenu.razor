@@ -28,10 +28,9 @@
                         
 
                     </ul>
-                    <a href="/Login">
-                        <button type="button" class="btn btn-link">Account</button>
+                    <a href="/UserAccount/@_siteState.UserNameLogged">
+                        <button class="btn btn-link">@_siteState.NoNavMenu_AccountButton</button>
                     </a>
-                    
                     
                 </div>
             </div>
@@ -43,5 +42,18 @@
         </article>
     </main>
 </div>
+
+@code{
+    [Inject]
+    public ICookieManager _cookieManager { get; set; }
+    [Inject]
+    public ISiteState _siteState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await _siteState.LoginUserCheck();
+
+    }
+}
 
 

@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
+using System.Security.Claims;
 
 namespace Chef_API
 {
@@ -22,6 +23,8 @@ namespace Chef_API
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+           
 
             builder.Services.AddTransient<ITokenManager, TokenManager>();
 
@@ -54,6 +57,12 @@ namespace Chef_API
                 };
             });
 
+            //Test policy for Token wrapped in cookie
+            builder.Services.AddAuthorization(o =>
+            {
+                o.AddPolicy("TestPolicy", policy => policy.RequireClaim(ClaimTypes.Name, "Gordon"));
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -73,7 +82,8 @@ namespace Chef_API
                 app.UseSwaggerUI();
             }
 
-            app.UseCors(policy => policy.WithOrigins("http://localhost:7093", "https://localhost:7093").AllowAnyMethod().WithHeaders(HeaderNames.ContentType));
+            app.UseCors(policy => policy.WithOrigins("http://localhost:7093", "https://localhost:7093").AllowAnyMethod().WithHeaders(HeaderNames.ContentType, HeaderNames.Authorization));
+            
             app.UseHttpsRedirection();
 
             app.UseAuthentication();

@@ -17,7 +17,6 @@ namespace Chef_API.TokenAuthentication
         {
             
             _tokenHandler = new JwtSecurityTokenHandler();
-            //secretKey = Encoding.ASCII.GetBytes("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
             secretKey = x;
         }
 
@@ -29,7 +28,7 @@ namespace Chef_API.TokenAuthentication
         {
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[] {new Claim(ClaimTypes.Name, userName)}), //TODO - add registration featuers
+                Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, userName)}),
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(secretKey),

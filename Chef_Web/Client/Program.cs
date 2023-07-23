@@ -14,13 +14,15 @@ namespace Chef_Web
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
+
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:44355/") });
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:44355/")  });
             builder.Services.AddScoped<IRecipeService, RecipeService>();
             builder.Services.AddScoped<ICookieManager, CookieManager>();
-            builder.Services.AddScoped<IButtonTestService, ButtonTestService>();
+            builder.Services.AddScoped<ISiteState, SiteState>();
+            builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<ITokenManager, TokenManager>();
             
-
             await builder.Build().RunAsync();
         }
     }

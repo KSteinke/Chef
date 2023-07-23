@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chef_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
     public class TestController : ControllerBase
@@ -20,5 +21,12 @@ namespace Chef_API.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [Route("/get2")]
+        [Authorize]
+        public async Task<IActionResult> Get2()
+        {
+            return Ok(); 
+        }
     }
 }
