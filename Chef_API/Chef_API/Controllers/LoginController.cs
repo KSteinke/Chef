@@ -43,8 +43,6 @@ namespace Chef_API.Controllers
                 else
                 {
                     var token = _tokenManager.GenerateToken(userCredentials.UserName);
-                    //Response.Cookies.Append("Token", token, new CookieOptions { HttpOnly = true, Secure = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None });
-                   //Response.Cookies.Append("User", userCredentials.UserName, new CookieOptions { HttpOnly = false, Secure = false, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None });
                     
                     return Ok(token);
                 }

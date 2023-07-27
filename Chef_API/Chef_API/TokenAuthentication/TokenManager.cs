@@ -28,7 +28,7 @@ namespace Chef_API.TokenAuthentication
         {
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, userName)}),
+                Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, userName), new Claim(ClaimTypes.Role, "HR") }),
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(secretKey),

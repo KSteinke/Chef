@@ -1,6 +1,8 @@
 ﻿@page "/Login"
 @using Chef_Models.Dtos;
 @layout NoNavMenu
+@inject NavigationManager UriHelper
+
 <div class="container ">
     <div class="row mx-5">
         <div class="col mx-5">
@@ -57,6 +59,6 @@
 
         await _loginService.Login(UserCredentials);
 
-        Test = await _loginService.Test();
+        UriHelper.NavigateTo("explore");
     }
 }

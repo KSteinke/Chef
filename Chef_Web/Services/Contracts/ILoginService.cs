@@ -6,6 +6,6 @@ namespace Chef_Web.Services.Contracts
     public interface ILoginService
     {
         public Task Login(LoginDto userCredentials);
-        public Task<bool> Test();
+        
     }
 }
