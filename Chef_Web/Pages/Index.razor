@@ -1,109 +1,170 @@
 ﻿@page "/"
-@layout NoNavMenu;
+@attribute [AllowAnonymous]
 @using Chef_Web.Services.Contracts;
 @using Chef_Models.Dtos;
-@attribute [AllowAnonymous]
-<div class="container-fluid border-secondary">
+
+
+<div class="container-fluid">
+    
     <div class="row">
-        <div class="col-1 ">
-            <label for="exampleSelect1" class="form-label mt-4 text-dark">Category</label>
-        </div>
-        <div class="col-2 col-lg my-3">
-            <div class="form-group">
-                <select class="form-select" id="exampleSelect1" @bind="Category">
-                    <option>All</option>
-                    <option>Breakfasts</option>
-                    <option>Dinners</option>
-                    <option>Suppers</option>
-                    <option>Snacks</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-1">
-
-        </div>
-        <div class="col-1">
-            <label for="exampleSelect1" class="form-label mt-4">Diet Category</label>
-        </div>
-        <div class="col-2 my-3 border-right-">
-            <div class="form-group">
-                <select class="form-select" id="exampleSelect1" @bind="DietCategory">
-                    <option>All</option>
-                    <option>Meat</option>
-                    <option>Vegetarian</option>
-                    <option>Vegan</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-1">
-        </div>
-        <div class="col-2 my-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" @bind="LunchBox">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Lunchbox suitable
-                </label>
-            </div>
-        </div>
-        <div class="col my-3">
-            <button type="button" class="btn btn-dark ">Refresh</button>
-        </div>
-    </div>
-</div>
-
-
-<div class="container-fluid my-5">
-    @if (Recipes == null)
-    {
-        <h3 class="mb-5">Wait!</h3>
-
-    }
-    else
-    {
-        <h3 class="mb-5">Enjoy Your Cooking!</h3>
-
-        var productCount = Recipes.Count();
-        <div class="row mt-3">
-
-            @if (productCount > 0)
-            {
-                @foreach (var recipe in Recipes)
-                {
-                    <div class="col-md-3 mb-3">
-                        <div class="card mb-3">
-                            <a href="/Recipe/@recipe.Id">
-                                <h3 class="card-header">@recipe.Name</h3>
-                                <img src="@($"data:image/jpg;base64,{recipe.RecipeImgBase64}")" alt="Image" style="width: 100%;">
-                            </a>
-                            <div class="card-body">
-                                <h5 class="card-title">Chef: @recipe.AuthorName</h5>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text">@recipe.Description</p>
-                            </div>
-                            <div class="card-footer text-muted">
-                                2 days ago
-                            </div>
+        <div class="col-2">
+            <div class="container-fluid border-secondary">
+                <div class="sidenav justify-content-center">
+                    <div class="row ">
+                        <div class="col my-2 ">
+                            <h4>Filter recipes</h4>
                         </div>
                     </div>
-                }
-            }
-
+                    <div class="row ">
+                        <fieldset class="form-group ">
+                            <legend class="mt-2">Category:</legend>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="category_radio" id="category_radio1" value="all" checked="">
+                                <label class="form-check-label" for="category_radio1">
+                                    All
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="category_radio" id="category_radio2" value="breakfast">
+                                <label class="form-check-label" for="category_radio2">
+                                    Breakfast
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="category_radio" id="category_radio3" value="dinner">
+                                <label class="form-check-label" for="category_radio3">
+                                    Dinner
+                                </label>
+                            </div
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="category_radio" id="category_radio4" value="supper">
+                                <label class="form-check-label" for="category_radio4">
+                                    Supper
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="category_radio" id="category_radio5" value="snack">
+                                <label class="form-check-label" for="category_radio5">
+                                    Snack
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row ">
+                        <fieldset class="form-group ">
+                            <legend class="mt-2">Diet category:</legend>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="diet_category_radio" id="diet_category_radio1" value="all" checked="">
+                                <label class="form-check-label" for="diet_category_radio1">
+                                    All
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="diet_category_radio" id="diet_category_radio2" value="meat">
+                                <label class="form-check-label" for="diet_category_radio2">
+                                    Meat only
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="diet_category_radio" id="diet_category_radio3" value="vegetarian">
+                                <label class="form-check-label" for="diet_category_radio3">
+                                    Vegetarian
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="diet_category_radio" id="diet_category_radio4" value="vegan">
+                                <label class="form-check-label" for="diet_category_radio4">
+                                    Vegan
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+                        <div class="row my-2 ">
+                            <div class="col justify-content-center">
+                                <div class="form-check link-underline-opacity-10-hover">
+                                    <input class="form-check-input" type="checkbox" value="" id="lunch_box_check_box" >
+                                    <label class="form-check-label" for="lunch_box_check_box">
+                                        Lunchbox suitable only
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row my-1">
+                                <div class="col mx-4 text-center">
+                                    <button type="button" class="btn btn-dark">Refresh</button>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
         </div>
-    }
+
+
+        <div class="col">
+            <div class="row">
+                <div class="container-fluid text-center border-secondary justify-content-center">
+                    <div class="col my-3">
+                        <p class="lead">Find your recipe Chef!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="container-fluid text-center border-secondary justify-content-center my-3">
+                    @if(Recipes == null)
+                    {
+                        <h3>The recipes are loading, please wait.</h3>
+                    }
+                    else if(Recipes.Count() > 0)
+                    {
+                        <div class="row">
+                        @foreach(var recipe in Recipes)
+                        {
+                            <div class="col my-2">
+                                <div class="card d-flex flex-column h-100  table-hover">
+                                    <a href="/Recipe/@recipe.Id">
+                                        <img src="@($"data:image/jpg;base64,{recipe.RecipeImgBase64}")" alt="Image" style="width: 100%;">
+                                    </a>
+                                    <h3 class="card-header h-25">@recipe.Name</h3>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Chef: @recipe.AuthorName</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">@recipe.Description</p>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        }
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="container-fluid my-3">
+                    <div class="row">
+                        <div class="col text-center">
+                            <button type="button" class="btn btn-dark">Load more recipes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 
-@code{
+
+
+@code {
     [Inject]
     public IRecipeService recipeService { get; set; }
 
     public IEnumerable<RecipeDto> Recipes { get; set; }
-
     public string ErrorMessage { get; set; }
-    public string Category { get; set; } 
-    public string DietCategory { get; set; }
-    public bool LunchBox { get; set; }
+    
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -116,6 +177,4 @@
         }
 
     }
-
-
 }
