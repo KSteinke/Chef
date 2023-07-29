@@ -34,7 +34,7 @@ namespace Chef_Web.Services
         {
             await WaitForReference();
             var result = await _accessorJsRef.Value.InvokeAsync<string>("get", key);
-
+            
             return result;
         }
 

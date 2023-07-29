@@ -1,6 +1,7 @@
 ﻿using Chef_Models.Dtos;
 using Chef_Web.Services.Contracts;
 using Microsoft.AspNetCore.Components.Authorization;
+using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -14,12 +15,15 @@ namespace Chef_Web.Services
         private readonly ICookieManager _cookieManager;
         public IAuthManager _jwtAuthManager;
         public AuthenticationStateProvider _authStateProvider;
-        public LoginService(HttpClient httpClient, ICookieManager cookieManager, IAuthManager jwtAuthManager, AuthenticationStateProvider authStateProvider )
+        private readonly ITokenManager _tokenManager;
+        public LoginService(HttpClient httpClient, ICookieManager cookieManager, IAuthManager jwtAuthManager, AuthenticationStateProvider authStateProvider, ITokenManager tokenManager)
         {
             _httpClient = httpClient;
             _cookieManager = cookieManager;
             _jwtAuthManager = jwtAuthManager;
             _authStateProvider = authStateProvider;
+            _tokenManager = tokenManager;
+
         }
 
         public async Task Login(LoginDto userCredentials)
@@ -39,9 +43,11 @@ namespace Chef_Web.Services
                     {
                         var token = await response.Content.ReadAsStringAsync();
 
-                        _jwtAuthManager.LogUser(token);
-                        await _authStateProvider.GetAuthenticationStateAsync();
-                        
+                        //_jwtAuthManager.LogUser(token);
+                        //await _authStateProvider.GetAuthenticationStateAsync();
+                        await _tokenManager.SetTokenAsync(token);
+                        ((AuthStateProviderService)_authStateProvider).NotifyUserAuthentication(token);
+                        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
                     }
                     else
@@ -65,6 +71,14 @@ namespace Chef_Web.Services
 
             
         }
+
+        public async Task Logout()
+        {
+            await _tokenManager.DisposeToken();
+            ((AuthStateProviderService)_authStateProvider).NotifyUserLogout();
+            _httpClient.DefaultRequestHeaders.Authorization = null;
+        }
+
 
 
 

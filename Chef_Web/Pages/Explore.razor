@@ -1,6 +1,21 @@
 ﻿@page "/Explore"
-@attribute [Authorize] //(Roles = "HR")]
+@using System.Security.Claims;
+@attribute [Authorize]
+
 <h3>Explore</h3>
+<AuthorizeView>
+    <Authorized>
+        @if (context.User.HasClaim(claim => claim.Type.ToString() == "role" && claim.Value == "HR"))
+        {
+            <p>Welcomen panie HR!</p>
+        }
+        @foreach(var claim in context.User.Claims)
+        {
+            <p>@claim.Type.ToString() @claim.Value</p>
+        }
+    </Authorized>
+</AuthorizeView>
+
 
 @code {
 

@@ -23,7 +23,7 @@ namespace Chef_API.Controllers
 
         [HttpGet]
         [Route("/get2")]
-        [Authorize]
+        [Authorize(Roles = "HR")]
         public async Task<IActionResult> Get2()
         {
             return Ok(); 

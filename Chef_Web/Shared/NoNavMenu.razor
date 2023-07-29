@@ -24,13 +24,20 @@
                             <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
                         </form>
                         </li>
-                        
-                        
-
                     </ul>
-                    <a href="/UserAccount/">
-                        <button class="btn btn-link"></button>
-                    </a>
+                    <AuthorizeView>
+                        <Authorized>
+                              <a href="/UserAccount/@context.User.Claims.FirstOrDefault(c => c.Type == "unique_name").Value.ToString()">
+                                  <p>@context.User.Claims.FirstOrDefault(c => c.Type == "unique_name").Value.ToString()</p>
+                              </a>
+                        </Authorized>
+                        <NotAuthorized>
+                            <a href="/Login">
+                                <p>Login</p>
+                            </a>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                    
                     
                 </div>
             </div>
@@ -44,12 +51,11 @@
 </div>
 
 @code{
-    [Inject]
-    public ICookieManager _cookieManager { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
-      
+       
     }
 }
 
