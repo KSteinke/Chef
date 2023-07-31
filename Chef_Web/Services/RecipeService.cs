@@ -25,7 +25,6 @@ namespace Chef_Web.Services
                         return Enumerable.Empty<RecipeDto>();
                     }
                     var x = await response.Content.ReadFromJsonAsync<IEnumerable<RecipeDto>>();
-                    
                     return x;
                 }
                 else
@@ -37,7 +36,35 @@ namespace Chef_Web.Services
             }
             catch (Exception)
             {
-                //Log exception
+                throw;
+            }
+        }
+
+
+        public async Task<IEnumerable<RecipeDto>> GetUserRecipes(string UserName)
+        {
+            try
+            {
+
+                var response = await this._httpClient.GetAsync($"api/v1/Recipe/{UserName}");
+                if (response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                    {
+                        return Enumerable.Empty<RecipeDto>();
+                    }
+                    var recipes = await response.Content.ReadFromJsonAsync<IEnumerable<RecipeDto>>();
+                    return recipes;
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    throw new Exception(message);
+                }
+
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }

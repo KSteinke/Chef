@@ -13,7 +13,6 @@
                         <div class="form-group">
                           <label for="exampleUsername1" class="form-label mt-4">Username:</label>
                             <input type="email" class="form-control" id="exampleUsername1" aria-describedby="emailHelp" placeholder="Enter Username" @bind="@UserCredentials.UserName">
-                            
                         </div>
                     </div>
                     <div class="row">
@@ -44,8 +43,6 @@
 }
 
 @code {
-
-
     [Inject]
     public ILoginService _loginService { get; set; }
 
@@ -56,9 +53,7 @@
     public async Task SendCredentials()
     {
         //TODO - add user credentaial validations
-
         await _loginService.Login(UserCredentials);
-
         UriHelper.NavigateTo("explore");
     }
 }

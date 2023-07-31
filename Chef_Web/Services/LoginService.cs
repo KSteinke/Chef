@@ -23,7 +23,6 @@ namespace Chef_Web.Services
             _jwtAuthManager = jwtAuthManager;
             _authStateProvider = authStateProvider;
             _tokenManager = tokenManager;
-
         }
 
         public async Task Login(LoginDto userCredentials)
@@ -42,13 +41,9 @@ namespace Chef_Web.Services
                     if(response.StatusCode == HttpStatusCode.OK)
                     {
                         var token = await response.Content.ReadAsStringAsync();
-
-                        //_jwtAuthManager.LogUser(token);
-                        //await _authStateProvider.GetAuthenticationStateAsync();
                         await _tokenManager.SetTokenAsync(token);
                         ((AuthStateProviderService)_authStateProvider).NotifyUserAuthentication(token);
                         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
-
                     }
                     else
                     {
@@ -65,7 +60,6 @@ namespace Chef_Web.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
 

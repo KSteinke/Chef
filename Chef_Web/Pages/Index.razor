@@ -35,7 +35,7 @@
                                 <label class="form-check-label" for="category_radio3">
                                     Dinner
                                 </label>
-                            </div
+                            </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="category_radio" id="category_radio4" value="supper">
                                 <label class="form-check-label" for="category_radio4">
@@ -121,7 +121,7 @@
                         @foreach(var recipe in Recipes)
                         {
                             <div class="col my-2">
-                                <div class="card d-flex flex-column h-100  table-hover">
+                                <div class="card d-flex flex-column h-100 table-hover">
                                     <a href="/Recipe/@recipe.Id">
                                         <img src="@($"data:image/jpg;base64,{recipe.RecipeImgBase64}")" alt="Image" style="width: 100%;">
                                     </a>

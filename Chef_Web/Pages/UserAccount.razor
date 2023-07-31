@@ -1,20 +1,97 @@
 ﻿@inject NavigationManager UriHelper
-@page "/UserAccount"
 @page "/UserAccount/{UserName}"
-@layout NoNavMenu
+@attribute [AllowAnonymous]
+<AuthorizeView>
+    <Authorized>
+        @if(context.User.HasClaim(claim => claim.Type.ToString() == "unique_name" && claim.Value == UserName))
+        {
+            //TO DO - Repair claims in WASM 
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="container border-secondary">
+                            <div class="row">
+                                <div class="col text-center my-1">
+                                    <p>Hello @UserName!</p>
+                                    <button type="button" class="btn btn-secondary btn-outline-dark w-75">Add Recipe</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-center my-1">
+                                    <button type="button" class="btn btn-secondary btn-outline-dark w-75" @onclick="OnClickLogout">Logout</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="container border-secondary">
+                            <div class="row">
+                                <div class="col my-1 text-center">
+                                    <p>Here are your recipes!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container border-secondary">
+                            <div class="row">
+                                <div class="col my-1 text-center">
+                                    //place for recipe
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        
+        @if (UserExist)
+        {
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div class="container border-secondary">
+                        <div class="row">
+                            <div class="col my-1 text-center">
+                                <p>Here are @UserName's recipes!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container border-secondary">
+                        <div class="row">
+                            <div class="col my-1 text-center">
+                                //place for recipe
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+        else
+        {
+            //TO DO - await _chefService.UserExist(string UserName);
+        }
+    </NotAuthorized>
+</AuthorizeView>
 
-
-<h3>UserAccount page!</h3>
-<h3>@UserName Welcome to you bardzo glad!</h3>
 
 @code {
-
+    //[Inject]
+    //private readonly IChefService _chefService { get; set; } //TO DO - add service IChefService for check if chef exist
 
     [Parameter]
     public string UserName { get; set; }
 
+    public bool UserExist = false;
+
     protected override void OnInitialized()
     {
-        
+
+    }
+
+    public void OnClickLogout()
+    {
+        UriHelper.NavigateTo("/Logout");
     }
 }

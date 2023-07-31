@@ -1,12 +1,42 @@
-﻿@page "/logout"
-@inject NavigationManager _navMgr;
-@inject ILoginService _loginService;
+﻿@page "/Logout"
+@using Chef_Models.Dtos;
+
+<div class="container ">
+    <div class="row mx-5">
+        <div class="col mx-5">
+            <div class="card mb-4">
+                <p class="card-header">Goodbye</p>
+                <div class="card-body">
+                    <div class="row my-4">
+                        <div class="col">
+                            <p class="card-body">You have been logedout.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <a href="/Login">
+                        <p>Login again Here!</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @code {
+
+
+    [Inject]
+    public ILoginService _loginService { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await _loginService.Logout();
-        _navMgr.NavigateTo("/login");
+        
     }
+    
+
+        
+    
 }
