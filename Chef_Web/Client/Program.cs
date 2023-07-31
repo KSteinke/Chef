@@ -31,7 +31,8 @@ namespace Chef_Web
             builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddScoped<IAuthManager, JwtAuthManager>();
             builder.Services.AddScoped<ITokenManager, TokenManager>();
-            
+            builder.Services.AddScoped<IIngredientService, IngredientService>();
+
             await builder.Build().RunAsync();
         }
     }

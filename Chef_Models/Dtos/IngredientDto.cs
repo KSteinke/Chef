@@ -11,6 +11,6 @@ namespace Chef_Models.Dtos
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Countable { get; set; }
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
     }
 }
