@@ -31,15 +31,22 @@
                 {
                     @foreach (var ingredient in AddedIngredients)
                     {
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                              <div class="col justify-content-center">
-                                @ingredient.Name
-                              </div>
-                              <div class="col justify-content-end">
-                                  <span class="badge bg-primary rounded-pill">@ingredient.Quantity </span>
-                                  <span class="badge bg-danger rounded-pill" @onclick="() => DeleteIngredient(ingredient)">X</span>
-                              </div>
-                          </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="col justify-content-center">
+                            @ingredient.Name
+                            </div>
+                            <div class="col justify-content-end">
+                                @if(ingredient.Countable)
+                                {
+                                    <span class="badge bg-primary rounded-pill">@ingredient.Quantity pcs.</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-primary rounded-pill">@ingredient.Quantity g.</span>
+                                }
+                                <span class="badge bg-danger rounded-pill" @onclick="() => DeleteIngredient(ingredient)">X</span>
+                            </div>
+                        </li>
                     }
                 }
                 
@@ -52,7 +59,7 @@
         <div class="col my-1">
             <div class="form-group" >
                 <label for="exampleSelect1" class="form-label mt-3">Add ingredients to your recipe</label>
-                <select class="form-select" id="exampleSelect1" @bind="IngredientToAdd.Id"> 
+                <select class="form-select" id="exampleSelect1" @bind="IngredientToAddId"> 
                     @foreach(var ingredient in AvailableIngridients)
                     {
                         <option value="@ingredient.Id">@ingredient.Name</option>
@@ -62,12 +69,12 @@
         </div>
         <div class="col my-1">
             <div class="form-group">
-                <label class="col-form-label " for="inputDefault">Default input</label>
-                <input type="text" class="form-control" placeholder="Default input" id="inputDefault">
+                <label class="col-form-label " for="QtyInput">Default input</label>
+                <input type="text" class="form-control" placeholder="Default input" id="QtyInput" @bind="IngredientToAddQty">
             </div>
         </div>
         <div class="col my-1 mt-5">
-            <button type="button" class="btn btn-secondary btn-outline-dark" @onclick="() => AddIngredient(IngredientToAdd)">Add Ingredient</button>
+            <button type="button" class="btn btn-secondary btn-outline-dark" @onclick="() => AddIngredient()">Add Ingredient</button>
         </div>
     </div>
 </div>
@@ -78,8 +85,8 @@
 
     public List<IngredientDto> AddedIngredients { get; set; }
     public List<IngredientDto> AvailableIngridients { get; set; }
-    public IngredientDto IngredientToAdd { get; set; }
-    
+    public int IngredientToAddId { get; set; }
+    public string IngredientToAddQty { get; set; }
 
     protected override Task OnInitializedAsync()
     {
@@ -93,10 +100,37 @@
         AddedIngredients.Remove(addedIngredient);
     }
 
-    public void AddIngredient(IngredientDto ingredientToAdd)
+    public void AddIngredient()
     {
+        if(AddedIngredients == null)
+        {
+            AddedIngredients = new List<IngredientDto>();
+        }
 
-        //AddedIngredients.Add(ingredientToAdd);
+        var obj = AvailableIngridients.Where(i => i.Id == IngredientToAddId).First();
+
+        if (IngredientToAddQty != null)
+        {
+            bool QtyInputConvSucces = int.TryParse(IngredientToAddQty, out int ingredientToAddQtyInt);
+            if(QtyInputConvSucces)
+            {
+                obj.Quantity = ingredientToAddQtyInt;
+            }
+            else
+            {
+                obj.Quantity = 0; 
+            } 
+        }
+
+        if(!AddedIngredients.Contains(obj))
+        {
+            AddedIngredients.Add(obj);
+        }
+        
     }
 
+    public void SelectIngredient(string ingredientValue)
+    {
+        
+    }
 }
