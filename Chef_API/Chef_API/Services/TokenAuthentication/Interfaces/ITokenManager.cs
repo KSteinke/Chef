@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Chef_API.TokenAuthentication.Interfaces
+namespace Chef_API.Services.TokenAuthentication.Interfaces
 {
     public interface ITokenManager
     {

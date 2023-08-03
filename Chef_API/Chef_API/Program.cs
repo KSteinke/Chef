@@ -1,8 +1,6 @@
 using Chef_API.Data;
 using Chef_API.Repositories;
 using Chef_API.Repositories.Interfaces;
-using Chef_API.TokenAuthentication.Interfaces;
-using Chef_API.TokenAuthentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,6 +9,8 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Security.Claims;
+using Chef_API.Services.TokenAuthentication.Interfaces;
+using Chef_API.Services.TokenAuthentication;
 
 namespace Chef_API
 {

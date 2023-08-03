@@ -1,6 +1,6 @@
 ﻿using Chef_API.Repositories;
 using Chef_API.Repositories.Interfaces;
-using Chef_API.TokenAuthentication.Interfaces;
+using Chef_API.Services.TokenAuthentication.Interfaces;
 using Chef_Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,7 +54,44 @@ namespace Chef_API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route ("/api/v1/Register")]
+        public async Task<IActionResult> Register([FromBody] LoginDto userCredentials)
+        {
+            try
+            {
+                if(userCredentials == null)
+                {
+                    ModelState.AddModelError("Conflict", "User alredy registred");//TO DO - use propper statuses
+                    return Conflict(ModelState);
+                }
 
+                if(await _chefRepository.CheckUserExist(userCredentials))
+                {
+                    ModelState.AddModelError("Conflict", "User alredy registred");
+                    return Conflict(ModelState);
+                }
+
+                var newUser = await _chefRepository.RegisterUser(userCredentials);
+                if(newUser == null)
+                {
+                    ModelState.AddModelError("Conflict", "User alredy registred");
+                    return Conflict(ModelState);
+                }
+                else
+                {
+                    var token = _tokenManager.GenerateToken(newUser.UserName);
+
+                    return Ok(token);
+                    
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
        
     }
 }

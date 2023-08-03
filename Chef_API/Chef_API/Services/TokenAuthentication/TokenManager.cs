@@ -1,11 +1,11 @@
-﻿using Chef_API.TokenAuthentication.Interfaces;
+﻿using Chef_API.Services.TokenAuthentication.Interfaces;
 using Chef_Models.Dtos;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Chef_API.TokenAuthentication
+namespace Chef_API.Services.TokenAuthentication
 {
     public class TokenManager : ITokenManager
     {
@@ -15,7 +15,7 @@ namespace Chef_API.TokenAuthentication
         byte[] x = Config.JwtTokenKey;
         public TokenManager()
         {
-            
+
             _tokenHandler = new JwtSecurityTokenHandler();
             secretKey = x;
         }

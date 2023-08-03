@@ -7,5 +7,7 @@ namespace Chef_API.Repositories.Interfaces
     {
         Task<IEnumerable<Chef>>GetChefs();
         Task<bool> veryfiLoginCredentials(LoginDto chefCredentials);
+        Task<bool> CheckUserExist(LoginDto userCredentials);
+        Task<Chef> RegisterUser(LoginDto userCredentials);
     }
 }

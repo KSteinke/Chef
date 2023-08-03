@@ -8,6 +8,7 @@ namespace Chef_Web.Services.Contracts
         public Task Login(LoginDto userCredentials);
         public Task Logout();
 
+        public Task Register(LoginDto userCredentials);
 
     }
 }

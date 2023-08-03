@@ -29,7 +29,7 @@ namespace Chef_Web.Services
         {
             try
             {
-                var response = await _httpClient.PostAsJsonAsync<LoginDto>("api/v1/Login", userCredentials); //TODO - Add api endpoint path
+                var response = await _httpClient.PostAsJsonAsync<LoginDto>("api/v1/Login", userCredentials);
                 if(response.IsSuccessStatusCode)
                 {
                     if(response.StatusCode == HttpStatusCode.NoContent)
@@ -73,7 +73,44 @@ namespace Chef_Web.Services
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }
 
+        public async Task Register(LoginDto userCredentials)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync<LoginDto>("api/v1/Register", userCredentials); 
+                if (response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == HttpStatusCode.NoContent)
+                    {
+                        var message = await response.Content.ReadAsStreamAsync();
+                        throw new Exception($"Http status: {response.StatusCode} Message-{message}");
+                    }
 
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var token = await response.Content.ReadAsStringAsync();
+                        await _tokenManager.SetTokenAsync(token);
+                        ((AuthStateProviderService)_authStateProvider).NotifyUserAuthentication(token);
+                        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+                    }
+                    else
+                    {
+                        var message = await response.Content.ReadAsStreamAsync();
+                        throw new Exception($"Http status: {response.StatusCode} Message-{message}");
+                    }
+
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStreamAsync();
+                    throw new Exception($"Http status: {response.StatusCode} Message-{message}");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
 
 
