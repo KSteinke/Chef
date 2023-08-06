@@ -42,11 +42,11 @@ namespace Chef_API.Controllers
             
         }
 
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<RecipeDto>>> UploadRecipe([FromBody] RecipeDto uploadedRecipe)
-        {
+        //[HttpPost]
+        //public async Task<ActionResult<IEnumerable<RecipeDto>>> UploadRecipe([FromBody] RecipeDto uploadedRecipe)
+        //{
 
-        }
+        //}
 
     }
 }

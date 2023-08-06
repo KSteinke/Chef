@@ -9,7 +9,6 @@ namespace Chef_API.Extentions
 {
     public static class DtoConvertions
     {
-        
         /// <summary>
         /// Converts IEnumerable that cointains Recipe objects to IEnumerable that contains RecipeDto objects
         /// </summary>
@@ -63,6 +62,18 @@ namespace Chef_API.Extentions
                 throw;
             }
 
+        }
+
+        public static IEnumerable<IngredientDto> ConverToDto(this IEnumerable<Ingredient> ingredients)
+        {
+            IEnumerable<IngredientDto> ingredientsDto = (from ingredient in ingredients
+                                                         select new IngredientDto
+                                                         { 
+                                                             Id = ingredient.Id,
+                                                             Name = ingredient.Name,
+                                                             Countable = ingredient.Countable
+                                                         }).ToList();
+            return ingredientsDto;
         }
 
 
