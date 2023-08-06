@@ -4,6 +4,6 @@ namespace Chef_Web.Services.Contracts
 {
     public interface IIngredientService
     {
-        public List<IngredientDto> GetIngredients();
+        Task<IEnumerable<IngredientDto>> GetIngredients();
     }
 }
