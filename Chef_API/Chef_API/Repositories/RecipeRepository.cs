@@ -28,11 +28,7 @@ namespace Chef_API.Repositories
             {
                 var result = await _chefDBContext.Recipes.AddAsync(recipe);
                 await _chefDBContext.SaveChangesAsync();
-                var recipeIngredients = postRecipeDto.Ingredients.ConverFromDto(result.Entity.Id);
-                foreach(var recipeIngredient in recipeIngredients)
-                {
-                    //TO DO - przerobić tak żeby najpierw konwertuję do List<IngredientRecipe> 
-                }
+                
                 return result.Entity;
             }
 
@@ -41,5 +37,26 @@ namespace Chef_API.Repositories
         }
 
 
+        public Recipe UploadRecipeTest(Recipe recipe)
+        {
+           var result = _chefDBContext.Recipes.Add(recipe);
+           _chefDBContext.SaveChanges();
+            return result.Entity;
+        }
+
+        public List<Ingredient> GetIngredients()
+        {
+            return _chefDBContext.Ingredients.ToList();
+        }
+
+        public async Task UploadRecipeIngredient(RecipeIngredient recipeIngredient)
+        {
+            await _chefDBContext.RecipeIngredients.AddAsync(recipeIngredient);
+            await _chefDBContext.SaveChangesAsync();
+
+            var sklanikiRecipe11 = _chefDBContext.RecipeIngredients
+                .Where(r => r.RecipeId == 11)
+                .Select(r => r.Ingredient).ToList();
+        }
     }
 }

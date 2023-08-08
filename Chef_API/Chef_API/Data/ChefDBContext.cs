@@ -14,21 +14,21 @@ namespace Chef_API.Data
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Chef> Chefs { get; set; }
         public DbSet<Ingredient> Ingredients { get; set;}
+        public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Recipe>()
-                .HasMany(e => e.Ingredients)
-                .WithMany(e => e.Recipes)
-                .UsingEntity<RecipeIngredient>(
-                j => j.HasOne(pt => pt.Ingredient)
-                    .WithMany(t => t.RecipeIngredients)
-                    .HasForeignKey(pt => pt.IngredientId),
-                j => j.HasOne(pt => pt.Recipe)
-                     .WithMany(t => t.RecipeIngredients)
-                     .HasForeignKey(pt => pt.RecipeId),
-                j => j.Property(pt => pt.Quantity)
-                );
+            modelBuilder.Entity<RecipeIngredient>().HasKey(rI => new { rI.RecipeId, rI.IngredientId });
+            
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne<Recipe>(rI => rI.Recipe)
+                .WithMany(r => r.RecipeIngredients)
+                .HasForeignKey(rI => rI.RecipeId);
+
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne<Ingredient>(rI => rI.Ingredient)
+                .WithMany(i => i.RecipeIngredients)
+                .HasForeignKey(rI => rI.IngredientId);
         }
 
     }

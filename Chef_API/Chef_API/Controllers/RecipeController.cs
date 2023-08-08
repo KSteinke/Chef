@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.IO;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Chef_API.Entities;
 
 namespace Chef_API.Controllers
 {
@@ -100,5 +101,43 @@ namespace Chef_API.Controllers
                 throw;
             }
         }
+
+
+
+        [HttpGet]
+        [Route("TEST")]
+        public async Task<IActionResult> PostRecipeTest()
+        {
+            var Ingredients = _recipeRepository.GetIngredients();
+            Recipe recipe = new Recipe
+            {
+                Name = "Test",
+                Description = "Test",
+                Category = "Test",
+                LunchBox = true,
+                AuthorId = 2,
+                
+            };
+            Recipe result = _recipeRepository.UploadRecipeTest(recipe);
+            foreach(var ingredient in Ingredients)
+            {
+                RecipeIngredient recipeIngredient = new RecipeIngredient()
+                {
+                    RecipeId = result.Id,
+                    IngredientId = ingredient.Id,
+                    Quantity = 5
+                };
+
+                await _recipeRepository.UploadRecipeIngredient(recipeIngredient);
+                
+                
+
+            }
+            
+
+            return Ok();
+        }
+
+
     }
 }

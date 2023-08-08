@@ -16,8 +16,6 @@ namespace Chef_API.Entities
         public string? Diet_Category { get; set; }
         public string? RecipePhotoURL { get; set; }
         public int AuthorId { get; set; }
-
-        public List<Ingredient> Ingredients { get; set;}
         public List<RecipeIngredient> RecipeIngredients { get; set; }
 
     }
