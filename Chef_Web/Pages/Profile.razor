@@ -21,11 +21,11 @@
             {
                 @foreach (var recipe in Recipes)
                 {
-                    <div class="col-md-3 mb-3">
+                    @*<div class="col-md-3 mb-3">
                         <div class="card mb-3">
                             <a href="/Recipe/@recipe.Id">
                                 <h3 class="card-header">@recipe.Name</h3>
-                                <img src="@($"data:image/jpg;base64,{recipe.RecipeImgBase64}")" alt="Image" style="width: 100%;">
+                                
                             </a>
                             <div class="card-body">
                                 <h5 class="card-title">Chef: @recipe.AuthorName</h5>
@@ -37,7 +37,7 @@
                                 2 days ago
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                 }
             }
 
@@ -54,7 +54,7 @@
     [Inject]
     public IRecipeService recipeService { get; set; }
 
-    public IEnumerable<RecipeDto> Recipes { get; set; }
+    public IEnumerable<PostRecipeDto> Recipes { get; set; }
 
     public string ErrorMessage { get; set; }
     public string Category { get; set; }

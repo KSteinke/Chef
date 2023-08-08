@@ -80,6 +80,7 @@ namespace Chef_API
             builder.Services.AddAuthorization(o =>
             {
                 o.AddPolicy("TestPolicy", policy => policy.RequireClaim(ClaimTypes.Name, "Gordon"));
+                
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

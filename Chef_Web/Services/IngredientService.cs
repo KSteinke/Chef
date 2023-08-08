@@ -46,8 +46,8 @@ namespace Chef_Web.Services
                     {
                         return Enumerable.Empty<IngredientDto>();
                     }
-                    var x = await response.Content.ReadFromJsonAsync<IEnumerable<IngredientDto>>();
-                    return x;
+                    var ingredients = await response.Content.ReadFromJsonAsync<IEnumerable<IngredientDto>>();
+                    return ingredients;
                 }
                 else
                 {

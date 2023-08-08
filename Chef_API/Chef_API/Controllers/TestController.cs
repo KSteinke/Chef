@@ -26,6 +26,7 @@ namespace Chef_API.Controllers
         [Authorize(Roles = "HR")]
         public async Task<IActionResult> Get2()
         {
+            
             return Ok(); 
         }
     }

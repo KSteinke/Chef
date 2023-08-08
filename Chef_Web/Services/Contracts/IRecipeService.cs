@@ -4,6 +4,7 @@ namespace Chef_Web.Services.Contracts
 {
     public interface IRecipeService
     {
-        Task<IEnumerable<RecipeDto>> GetRecipes();
+        Task<IEnumerable<PostRecipeDto>> GetRecipes();
+        Task UploadRecipe(MultipartFormDataContent content);
     }
 }

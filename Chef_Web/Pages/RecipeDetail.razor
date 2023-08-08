@@ -13,9 +13,9 @@ else
 {
     <div class="container-fluid">
         <div class="row ">
-            <div class="col-4 ">
+            @*<div class="col-4 ">
                 <img src="@($"data:image/jpg;base64,{Recipes.First().RecipeImgBase64}")" alt="Image" style="width: 100%;">
-            </div>
+            </div>*@
             <div class="col">
                 <div class="row my-1">
                     <div class="col">
@@ -24,7 +24,7 @@ else
                 </div>
                 <div class="row my-1">
                     <div class="col">
-                        <h4>Chef: @Recipes.First().AuthorName</h4>
+                        @*<h4>Chef: @Recipes.First().AuthorName</h4>*@
                     </div>
                 </div>
                 <div class="row my-1">
@@ -86,7 +86,7 @@ else
     [Inject]
     public IRecipeService recipeService { get; set; }
 
-    public IEnumerable<RecipeDto> Recipes { get; set; }
+    public IEnumerable<PostRecipeDto> Recipes { get; set; }
 
     public string ErrorMessage { get; set; }
     
@@ -94,7 +94,7 @@ else
     {
         try
         {
-            Recipes = await recipeService.GetRecipes();
+            //Recipes = await recipeService.GetRecipes();
         }
         catch (Exception ex)
         {

@@ -6,7 +6,7 @@
         public string Name { get; set; }
         public bool Countable { get; set; } 
         
-        public ICollection<Recipe> Recipes { get; set; }
+        public List<Recipe> Recipes { get; set; }
         public List<RecipeIngredient> RecipeIngredients { get; set; }
     }
 }

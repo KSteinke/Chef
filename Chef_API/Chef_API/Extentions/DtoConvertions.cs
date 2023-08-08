@@ -14,36 +14,30 @@ namespace Chef_API.Extentions
         /// </summary>
         /// <param name="recipies">IEnumerable list of Recipe objects</param>
         /// <returns></returns>
-        public static IEnumerable<RecipeDto> ConvertoToDto(this IEnumerable<Recipe> recipies, IEnumerable<Chef> chefs)
-        {
-            //IEnumerable<RecipeDto> recipesDto = new List<RecipeDto>();
+        //public static IEnumerable<PostRecipeDto> ConvertoToDto(this IEnumerable<Recipe> recipies, IEnumerable<Chef> chefs)
+        //{
+        //    //IEnumerable<RecipeDto> recipesDto = new List<RecipeDto>();
 
 
-            IEnumerable<RecipeDto> recipesDto =  (from recipe in recipies
-                                                  join chef in chefs
-                                                  on recipe.AuthorId equals chef.Id
+        //    IEnumerable<PostRecipeDto> recipesDto = (from recipe in recipies
+        //                                         join chef in chefs
+        //                                         on recipe.AuthorId equals chef.Id
 
-                    select new RecipeDto
-                    {
-                        Id = recipe.Id,
-                        Name = recipe.Name,
-                        Description = recipe.Description,
-                        Category = recipe.Category,
-                        LunchBox = recipe.LunchBox,
-                        Diet_Category = recipe.Diet_Category,
-                        RecipePhotoURL = recipe.RecipePhotoURL,
-                        AuthorName = chef.UserName,
-                        PrepDescription = recipe.PrepDescription
-                    }).ToList();
-            foreach (RecipeDto recipe in recipesDto)
-            {
-                //recipe.RecipeImg = ReadImg(recipe.RecipePhotoURL);
-                //recipe.RecipeImg = ReadImgMultipart(recipe.RecipePhotoURL);
-                recipe.RecipeImgBase64 = ReadImgByte(recipe.RecipePhotoURL);
-            }
-            return recipesDto;
-            
-        }
+        //                                         select new PostRecipeDto
+        //                                         {
+        //                                             Id = recipe.Id,
+        //                                             Name = recipe.Name,
+        //                                             Description = recipe.Description,
+        //                                             Category = recipe.Category,
+        //                                             LunchBox = recipe.LunchBox,
+        //                                             Diet_Category = recipe.Diet_Category,
+        //                                             AuthorName = chef.UserName,
+        //                                             PrepDescription = recipe.PrepDescription
+        //                                         }).ToList();
+
+        //    return recipesDto;
+
+        //}
 
         public static string ReadImgByte(string imgUrl)
         {
@@ -52,7 +46,6 @@ namespace Chef_API.Extentions
                 string recipeImgPath = Path.Combine(Config.RecipeImgPath, imgUrl);
                 byte[] recipeImgBytes = File.ReadAllBytes(recipeImgPath);
                 string recipeImgBase64 = Convert.ToBase64String(recipeImgBytes, 0, recipeImgBytes.Length);
-                //File.WriteAllBytes("D:\\Programowanie\\Chef\\Images_Tests\\Test.jpg", Convert.FromBase64String(recipeImgBase64));
                 return recipeImgBase64;
 
             }
@@ -76,7 +69,38 @@ namespace Chef_API.Extentions
             return ingredientsDto;
         }
 
+        public static Recipe ConvertFromDto(this PostRecipeDto postRecipeDto, string recipePhotoUrl, int userId)
+        {
+            
+            Recipe recipe = new Recipe
+            {
+                Name = postRecipeDto.Name,
+                Description = postRecipeDto.Description,
+                PrepDescription = postRecipeDto.PrepDescription,
+                Category = postRecipeDto.Category,
+                LunchBox = postRecipeDto.LunchBox,
+                Diet_Category = postRecipeDto.Diet_Category,
+                RecipePhotoURL = recipePhotoUrl,
+                AuthorId = userId
+            };
+            return recipe;
+        }
 
+        public static List<RecipeIngredient> ConverFromDto(this List<IngredientDto> ingredientsDto, int recipeId)
+        {
+            List<RecipeIngredient> recipeIngredients = new List<RecipeIngredient>();
+            foreach(var ingredientDto in ingredientsDto)
+            {
+                recipeIngredients.Add(new RecipeIngredient
+                {
+                    RecipeId = recipeId,
+                    IngredientId = ingredientDto.Id,
+                    Quantity = ingredientDto.Quantity ?? 0
+                });
+            }
+
+            return recipeIngredients;
+        }
 
     }
 }

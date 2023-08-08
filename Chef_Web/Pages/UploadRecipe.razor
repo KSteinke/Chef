@@ -1,6 +1,7 @@
 ﻿@page "/UploadRecipe"
 @using Chef_Models.Dtos;
 @using Chef_Web.Services.Contracts;
+@using System.Net.Http.Headers;
 @*@attribute [Authorize]*@
 
 
@@ -18,7 +19,8 @@
             <div class="col" >
                 <div class="form-group my-1" >
                     <label for="formFile" class="form-label mt-4">Default file input example</label>
-                    <input class="form-control" type="file" id="formFile">
+                    @*<input class="form-control" type="file" id="formFile" onchange="@OnInputFileChange">*@
+                    <InputFile OnChange="@OnInputFileChange" />      @*Make it prettier*@
                 </div>
             </div>
         </div>
@@ -87,11 +89,14 @@ else
 @code {
     [Inject]
     public IIngredientService _ingredientService { get; set; }
+    [Inject]
+    public IRecipeService _recipeService { get; set; }
 
     public List<IngredientDto> AddedIngredients { get; set; }
     public IEnumerable<IngredientDto> AvailableIngridients { get; set; }
     public int IngredientToAddId { get; set; }
     public string IngredientToAddQty { get; set; }
+    public PostRecipeDto RecipeToUpload { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -129,11 +134,47 @@ else
         {
             AddedIngredients.Add(obj);
         }
-        
+
     }
 
     public void SelectIngredient(string ingredientValue)
     {
+
+    }
+
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        using var content = new MultipartFormDataContent();
+
+        foreach(var file in e.GetMultipleFiles())
+        {
+            try
+            {
+                var fileContent = new StreamContent(file.OpenReadStream());
+
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+
+                content.Add(
+                content: fileContent,
+                name: "\"RecipeImg\"",
+                fileName: "RecipeImg");
+
+                content.Add(new StringContent("TestString"), "TestString");
+                await _recipeService.UploadRecipe(content);  //TO DO - plan jest prosty zrobić serializowanie do JSon pozostałych elementów i jazdunia
+
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+        
+
+        
+
         
     }
 }

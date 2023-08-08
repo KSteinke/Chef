@@ -12,19 +12,18 @@ namespace Chef_Web.Services
         {
             this._httpClient = httpClient;
         }
-        public async Task<IEnumerable<RecipeDto>> GetRecipes()
+        public async Task<IEnumerable<PostRecipeDto>> GetRecipes()
         {
             try
             {
-
                 var response = await this._httpClient.GetAsync("api/v1/Recipe");
                 if (response.IsSuccessStatusCode)
                 {
                     if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                     {
-                        return Enumerable.Empty<RecipeDto>();
+                        return Enumerable.Empty<PostRecipeDto>();
                     }
-                    var x = await response.Content.ReadFromJsonAsync<IEnumerable<RecipeDto>>();
+                    var x = await response.Content.ReadFromJsonAsync<IEnumerable<PostRecipeDto>>();
                     return x;
                 }
                 else
@@ -41,7 +40,7 @@ namespace Chef_Web.Services
         }
 
 
-        public async Task<IEnumerable<RecipeDto>> GetUserRecipes(string UserName)
+        public async Task<IEnumerable<PostRecipeDto>> GetUserRecipes(string UserName)
         {
             try
             {
@@ -51,9 +50,9 @@ namespace Chef_Web.Services
                 {
                     if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                     {
-                        return Enumerable.Empty<RecipeDto>();
+                        return Enumerable.Empty<PostRecipeDto>();
                     }
-                    var recipes = await response.Content.ReadFromJsonAsync<IEnumerable<RecipeDto>>();
+                    var recipes = await response.Content.ReadFromJsonAsync<IEnumerable<PostRecipeDto>>();
                     return recipes;
                 }
                 else
@@ -67,6 +66,11 @@ namespace Chef_Web.Services
             {
                 throw;
             }
+        }
+
+        public async Task UploadRecipe(MultipartFormDataContent content)
+        {
+            var response = await _httpClient.PostAsync("api/v1/Recipe/Upload", content);
         }
     }
 }
