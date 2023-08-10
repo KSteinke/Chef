@@ -10,7 +10,14 @@
     <div class="container-fluid">
         <div class="row text-center">
             <div class="col">
-                <img src="/assets/addRecipeImage.jpg" alt="Add Recipe" width="250" class="border-secondary"/>
+                @if(imageDataUrl == null)
+                {
+                    <img src="/assets/addRecipeImage.jpg" alt="Add Recipe" width="250" class="border-secondary" />
+                }
+                else
+                {
+                    <img src=@imageDataUrl alt="Add Recipe" width="250" class="border-secondary" />
+                }
             </div>
         </div>
     </div>
@@ -30,9 +37,9 @@
             <div class="col my-1">
                 <h3>List of ingredients</h3>
                 <ul class="list-group">
-                    @if (AddedIngredients != null)
+                    @if (NewRecipe.Ingredients != null)
                     {
-                        @foreach (var ingredient in AddedIngredients)
+                        @foreach (var ingredient in NewRecipe.Ingredients)
                         {
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div class="col justify-content-center">
@@ -81,6 +88,13 @@
             </div>
         </div>
     </div>
+    <div class="container-fluid border-secondary my-1 w-50 align-content-center align-items-center justify-content-center text-center">
+        <div class="row text-center align-content-center">
+            <div class="col my-1">
+                <button type="button" class="btn btn-secondary btn-outline-dark" @onclick="() => UploadNewRecipe()">Upload Recipe</button>
+            </div>
+        </div>
+    </div>
 }
 else
 {
@@ -91,12 +105,14 @@ else
     public IIngredientService _ingredientService { get; set; }
     [Inject]
     public IRecipeService _recipeService { get; set; }
-
-    public List<IngredientDto> AddedIngredients { get; set; }
     public IEnumerable<IngredientDto> AvailableIngridients { get; set; }
     public int IngredientToAddId { get; set; }
+    private byte[] imageData;
+    private string imageDataUrl;
     public string IngredientToAddQty { get; set; }
-    public PostRecipeDto RecipeToUpload { get; set; }
+    public IBrowserFile NewRecipeImg { get; set; }
+    public PostRecipeDto NewRecipe = new PostRecipeDto();
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -105,14 +121,14 @@ else
 
     public void DeleteIngredient(IngredientDto addedIngredient)
     {
-        AddedIngredients.Remove(addedIngredient);
+        NewRecipe.Ingredients.Remove(addedIngredient);
     }
 
     public void AddIngredient()
     {
-        if(AddedIngredients == null)
+        if (NewRecipe.Ingredients == null)
         {
-            AddedIngredients = new List<IngredientDto>();
+            NewRecipe.Ingredients = new List<IngredientDto>();
         }
 
         var obj = AvailableIngridients.Where(i => i.Id == IngredientToAddId).First();
@@ -130,51 +146,35 @@ else
             } 
         }
 
-        if(!AddedIngredients.Contains(obj))
+        if (!NewRecipe.Ingredients.Contains(obj))
         {
-            AddedIngredients.Add(obj);
+            NewRecipe.Ingredients.Add(obj);
         }
 
     }
-
-    public void SelectIngredient(string ingredientValue)
-    {
-
-    }
-
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
-        using var content = new MultipartFormDataContent();
-
-        foreach(var file in e.GetMultipleFiles())
+        NewRecipeImg = e.File;
+        if (e.File != null)
         {
-            try
+            // Read the image data into a byte array
+            using (var stream = e.File.OpenReadStream())
             {
-                var fileContent = new StreamContent(file.OpenReadStream());
-
-                fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
-
-                content.Add(
-                content: fileContent,
-                name: "\"RecipeImg\"",
-                fileName: "RecipeImg");
-
-                content.Add(new StringContent("TestString"), "TestString");
-                await _recipeService.UploadRecipe(content);  //TO DO - plan jest prosty zrobić serializowanie do JSon pozostałych elementów i jazdunia
-
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+                    imageData = memoryStream.ToArray();
+                }
             }
-            catch (Exception)
-            {
-                
-                throw;
-            }
+            // Convert the byte array to a Base64-encoded data URL
+            imageDataUrl = $"data:{e.File.ContentType};base64,{Convert.ToBase64String(imageData)}";
         }
-
-        
-
-        
-
-        
     }
+
+    public async Task UploadNewRecipe()
+    {
+        await _recipeService.UploadRecipe(NewRecipe, NewRecipeImg);
+    }
+
 }

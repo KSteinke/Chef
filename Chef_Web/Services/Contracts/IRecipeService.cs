@@ -1,10 +1,11 @@
 ﻿using Chef_Models.Dtos;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Chef_Web.Services.Contracts
 {
     public interface IRecipeService
     {
         Task<IEnumerable<PostRecipeDto>> GetRecipes();
-        Task UploadRecipe(MultipartFormDataContent content);
+        Task UploadRecipe(PostRecipeDto newPostRecipeDto, IBrowserFile newRecipeImg);
     }
 }
