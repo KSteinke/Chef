@@ -8,6 +8,9 @@ using System.IO;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using Chef_API.Entities;
+using System.Security.Claims;
+using System.Net.Http.Headers;
+using System.IO.Pipes;
 
 namespace Chef_API.Controllers
 {
@@ -51,9 +54,37 @@ namespace Chef_API.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("RecipePhoto")]
+        public async Task<IActionResult> GetRecipeImg([FromQuery]int recipeId)
+        {
+            try
+            {
+                var content = new MultipartFormDataContent();
+                var recipeImgName = await _recipeRepository.GetRecipeImgName(recipeId);
+                var path = Path.Combine(_config.GetValue<string>("Paths:RecipeImgPath"), recipeImgName);
+
+
+                var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+                
+                var fileContent = new StreamContent(fs);
+                var contentType = "image/jpeg"; // Change this based on the actual image type
+                var file = File(fs, contentType);
+                
+                return file;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         [HttpPost]
         [Route("Upload")]
-        public async Task<ActionResult> UploadRecipe([FromForm] RecipeDtoWrapped recipeDtoWrapped)
+        [Authorize]
+        public async Task<ActionResult<GetRecipeDto>> UploadRecipe([FromForm] RecipeDtoWrapped recipeDtoWrapped)
         {
 
             long maxFileSize = 1024 * 500;
@@ -67,8 +98,12 @@ namespace Chef_API.Controllers
                 {
 
                     var recipeDtoJson = recipeDtoWrapped.RecipeDtoJson;
-                    
+
                     PostRecipeDto recipeDto = JsonSerializer.Deserialize<PostRecipeDto>(recipeDtoJson);
+                    if(recipeDto == null)
+                    {
+                        return BadRequest();
+                    }
                     
                     //TO DO - add validation for recipe Dto
 
@@ -82,12 +117,11 @@ namespace Chef_API.Controllers
                     {
                         return BadRequest(); //TO DO - creat propper response
                     }
-                    //TO DO - Get UserName, Photo Url
-
-                    //recipeDto.RecipePhotoURL = path;
-                    //var newRecipe = recipeDto.ConvertFromDto();
                     
-                    return Ok();
+
+                    var uploadedRecipeDto = await _recipeRepository.UploadRecipe(recipeDto, trustedFileNameForFileStorage, User.Identity.Name);
+                    
+                    return Ok(uploadedRecipeDto);
 
                 }
                 else

@@ -86,6 +86,25 @@ namespace Chef_API.Extentions
             return recipe;
         }
 
+        public static GetRecipeDto ConvertToDto(this Recipe recipe, IEnumerable<IngredientDto> ingredientDtos)
+        {
+            GetRecipeDto getRecipeDto = new GetRecipeDto
+            {
+                Id = recipe.Id,
+                Name = recipe.Name,
+                Description = recipe.Description,
+                PrepDescription = recipe.PrepDescription,
+                Category= recipe.Category,
+                LunchBox = recipe.LunchBox,
+                Diet_Category = recipe.Diet_Category,
+                AuthorId = recipe.AuthorId,
+                IngredientDtos = ingredientDtos
+                
+            };
+
+            return getRecipeDto;
+        }
+
         public static List<RecipeIngredient> ConverFromDto(this List<IngredientDto> ingredientsDto, int recipeId)
         {
             List<RecipeIngredient> recipeIngredients = new List<RecipeIngredient>();

@@ -20,7 +20,7 @@ namespace Chef_API.Repositories
             return recipes;
         }
 
-        public async Task<Recipe> UploadRecipe(PostRecipeDto postRecipeDto, string recipePhotoUrl, string userName)
+        public async Task<GetRecipeDto> UploadRecipe(PostRecipeDto postRecipeDto, string recipePhotoUrl, string userName)
         {
             var userId = await _chefDBContext.Chefs.Where(chef => chef.UserName == userName).Select(x => x.Id).FirstAsync();
             var recipe = postRecipeDto.ConvertFromDto(recipePhotoUrl, userId);
@@ -28,8 +28,23 @@ namespace Chef_API.Repositories
             {
                 var result = await _chefDBContext.Recipes.AddAsync(recipe);
                 await _chefDBContext.SaveChangesAsync();
+
+
+                foreach(var ingredient in postRecipeDto.Ingredients)
+                {
+                    RecipeIngredient recipeIngredient = new RecipeIngredient()
+                    {
+                        RecipeId = result.Entity.Id,
+                        IngredientId = ingredient.Id,
+                        Quantity = ingredient.Quantity ?? 0
+                    };
+                    
+                    await UploadRecipeIngredient(recipeIngredient);
+
+                }
                 
-                return result.Entity;
+                var getRecipeDto = result.Entity.ConvertToDto(postRecipeDto.Ingredients);
+                return getRecipeDto;
             }
 
             return null;
@@ -37,6 +52,14 @@ namespace Chef_API.Repositories
         }
 
 
+        public async Task<string> GetRecipeImgName(int recipeId)
+        {
+            var photoName = await _chefDBContext.Recipes.Where(r => r.Id == recipeId).Select(r => r.RecipePhotoURL).FirstOrDefaultAsync();
+            return photoName;
+        }
+
+
+        //Tests
         public Recipe UploadRecipeTest(Recipe recipe)
         {
            var result = _chefDBContext.Recipes.Add(recipe);
@@ -54,9 +77,6 @@ namespace Chef_API.Repositories
             await _chefDBContext.RecipeIngredients.AddAsync(recipeIngredient);
             await _chefDBContext.SaveChangesAsync();
 
-            var sklanikiRecipe11 = _chefDBContext.RecipeIngredients
-                .Where(r => r.RecipeId == 11)
-                .Select(r => r.Ingredient).ToList();
         }
     }
 }
