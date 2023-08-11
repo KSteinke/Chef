@@ -54,6 +54,6 @@
     {
         //TODO - add user credentaial validations
         await _loginService.Login(UserCredentials);
-        UriHelper.NavigateTo("explore");
+        UriHelper.NavigateTo($"/UserAccount/{UserCredentials.UserName}");
     }
 }

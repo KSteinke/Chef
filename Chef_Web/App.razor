@@ -4,9 +4,9 @@
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(NoNavMenu)">
-            <NotAuthorized>
+            @*<NotAuthorized>
                     <p>You are not authorized to access this page.</p>
-            </NotAuthorized>
+            </NotAuthorized>*@
         </AuthorizeRouteView>
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>

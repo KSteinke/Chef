@@ -2,6 +2,7 @@
 using Chef_Web.Services.Contracts;
 using Microsoft.AspNetCore.Components.Forms;
 using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -74,15 +75,9 @@ namespace Chef_Web.Services
             }
         }
 
-        public async Task UploadRecipe(PostRecipeDto newPostRecipeDto, IBrowserFile newRecipeImg)
+        public async Task<int> UploadRecipe(PostRecipeDto newPostRecipeDto, IBrowserFile newRecipeImg)
         {
-            //MockUP
-            newPostRecipeDto.Name = "TestClient";
-            newPostRecipeDto.Description = "TestClient";
-            newPostRecipeDto.PrepDescription = "TestClient";
-            newPostRecipeDto.Category = "TestClient";
-            newPostRecipeDto.LunchBox = true;
-            newPostRecipeDto.Diet_Category = "TestClient";
+            
 
 
 
@@ -107,10 +102,32 @@ namespace Chef_Web.Services
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
                     var response = await _httpClient.PostAsync("api/v1/Recipe/Upload", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                        {
+                            return 0;
+                        }
+                        if (response.StatusCode == HttpStatusCode.OK)
+                        {
+                            var uploadedRecipeId = await response.Content.ReadFromJsonAsync<int>();
+                            return uploadedRecipeId;
+                        }
+                        else
+                        {
+                            var message = await response.Content.ReadAsStreamAsync();
+                            throw new Exception($"Http status: {response.StatusCode} Message-{message}");
+                        }
+                    }
+                    else
+                    {
+                        var message = await response.Content.ReadAsStringAsync();
+                        throw new Exception(message);
+                    }
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
             

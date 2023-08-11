@@ -2,104 +2,176 @@
 @using Chef_Models.Dtos;
 @using Chef_Web.Services.Contracts;
 @using System.Net.Http.Headers;
-@*@attribute [Authorize]*@
+@inject NavigationManager UriHelper
 
-
-@if (AvailableIngridients != null)
-{
-    <div class="container-fluid">
-        <div class="row text-center">
-            <div class="col">
-                @if(imageDataUrl == null)
-                {
-                    <img src="/assets/addRecipeImage.jpg" alt="Add Recipe" width="250" class="border-secondary" />
-                }
-                else
-                {
-                    <img src=@imageDataUrl alt="Add Recipe" width="250" class="border-secondary" />
-                }
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid border-secondary my-1 w-50 align-content-center">
-        <div class="row text-center ">
-            <div class="col" >
-                <div class="form-group my-1" >
-                    <label for="formFile" class="form-label mt-4">Default file input example</label>
-                    @*<input class="form-control" type="file" id="formFile" onchange="@OnInputFileChange">*@
-                    <InputFile OnChange="@OnInputFileChange" />      @*Make it prettier*@
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid border-secondary my-1 w-50 align-content-center">
-        <div class="row text-center ">
-            <div class="col my-1">
-                <h3>List of ingredients</h3>
-                <ul class="list-group">
-                    @if (NewRecipe.Ingredients != null)
-                    {
-                        @foreach (var ingredient in NewRecipe.Ingredients)
+<AuthorizeView>
+    <Authorized>
+        @if (AvailableIngridients != null)
+        {
+            <div class="container-fluid">
+                <div class="row text-center">
+                    <div class="col">
+                        @if(imageDataUrl == null)
                         {
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div class="col justify-content-center">
-                                    @ingredient.Name
-                                </div>
-                                <div class="col justify-content-end">
-                                    @if (ingredient.Countable)
-                                    {
-                                        <span class="badge bg-primary rounded-pill">@ingredient.Quantity pcs.</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-primary rounded-pill">@ingredient.Quantity g.</span>
-                                    }
-                                    <span class="badge bg-danger rounded-pill" @onclick="() => DeleteIngredient(ingredient)">X</span>
-                                </div>
-                            </li>
+                            <img src="/assets/addRecipeImage.jpg" alt="Add Recipe" width="250" class="border-secondary" />
                         }
-                    }
-
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid border-secondary my-1 w-50 align-content-center align-items-center justify-content-center text-center">
-        <div class="row text-center align-content-center">
-            <div class="col my-1">
-                <div class="form-group" >
-                    <label for="exampleSelect1" class="form-label mt-3">Add ingredients to your recipe</label>
-                    <select class="form-select" id="exampleSelect1" @bind="IngredientToAddId"> 
-                        @foreach (var ingredient in AvailableIngridients)
+                        else
                         {
-                            <option value="@ingredient.Id">@ingredient.Name</option>
+                            <img src=@imageDataUrl alt="Add Recipe" width="250" class="border-secondary" />
                         }
-                    </select>
+                    </div>
                 </div>
             </div>
-            <div class="col my-1">
-                <div class="form-group">
-                    <label class="col-form-label " for="QtyInput">Default input</label>
-                    <input type="text" class="form-control" placeholder="Default input" id="QtyInput" @bind="IngredientToAddQty">
+            <div class="container-fluid border-secondary my-1 w-50 align-content-center">
+                <div class="row text-center ">
+                    <div class="col" >
+                        <div class="form-group my-1" >
+                            <label for="formFile" class="form-label mt-4">Default file input example</label>
+                            @*<input class="form-control" type="file" id="formFile" onchange="@OnInputFileChange">*@
+                            <InputFile OnChange="@OnInputFileChange" />      @*Make it prettier*@
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col my-1 mt-5">
-                <button type="button" class="btn btn-secondary btn-outline-dark" @onclick="() => AddIngredient()">Add Ingredient</button>
+            <div class="container-fluid border-secondary my-1 w-50 align-content-center">
+                <div class="row text-center ">
+                    <div class="col my-1">
+                        <h3>List of ingredients</h3>
+                        <ul class="list-group">
+                            @if (NewRecipe.Ingredients != null)
+                            {
+                                @foreach (var ingredient in NewRecipe.Ingredients)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="col justify-content-center">
+                                            @ingredient.Name
+                                        </div>
+                                        <div class="col justify-content-end">
+                                            @if (ingredient.Countable)
+                                            {
+                                                <span class="badge bg-primary rounded-pill">@ingredient.Quantity pcs.</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-primary rounded-pill">@ingredient.Quantity g.</span>
+                                            }
+                                            <span class="badge bg-danger rounded-pill" @onclick="() => DeleteIngredient(ingredient)">X</span>
+                                        </div>
+                                    </li>
+                                }
+                            }
+
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="container-fluid border-secondary my-1 w-50 align-content-center align-items-center justify-content-center text-center">
-        <div class="row text-center align-content-center">
-            <div class="col my-1">
-                <button type="button" class="btn btn-secondary btn-outline-dark" @onclick="() => UploadNewRecipe()">Upload Recipe</button>
+            <div class="container-fluid border-secondary my-1 w-50 align-content-center align-items-center justify-content-center text-center">
+                <div class="row text-center align-content-center">
+                    <div class="col my-1">
+                        <div class="form-group" >
+                            <label for="exampleSelect1" class="form-label mt-3">Add ingredients to your recipe</label>
+                            <select class="form-select" id="exampleSelect1" @bind="IngredientToAddId"> 
+                                @foreach (var ingredient in AvailableIngridients)
+                                {
+                                    <option value="@ingredient.Id">@ingredient.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col my-1">
+                        <div class="form-group">
+                            <label class="col-form-label " for="QtyInput">Default input</label>
+                            <input type="text" class="form-control" placeholder="Default input" id="QtyInput" @bind="IngredientToAddQty">
+                        </div>
+                    </div>
+                    <div class="col my-1 mt-5">
+                        <button type="button" class="btn btn-secondary btn-outline-dark" @onclick="() => AddIngredient()">Add Ingredient</button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-}
-else
-{
-    <h1>Loading</h1>
-}
+            <div class="container-fluid border-secondary my-1 w-50 align-content-center align-items-center justify-content-center text-center">
+                <div class="row text-center align-content-center">
+                    <div class="col my-1">
+                        <div class="form-group">
+                            <label class="col-form-label mt-4" for="inputDefault">Name of your recipe:</label>
+                            <input type="text" class="form-control" placeholder="Default input" id="inputDefault" @bind="NewRecipe.Name">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid border-secondary my-1 w-50 align-content-center align-items-center justify-content-center text-center">
+                <div class="row text-center align-content-center">
+                    <div class="col my-1">
+                        <div class="form-group">
+                            <label class="col-form-label mt-4" for="inputDefault">Short description of your recipe:</label>
+                            <input type="text" class="form-control" placeholder="Default input" id="inputDefault" @bind = "NewRecipe.Description">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid border-secondary my-1 w-50 align-content-center align-items-center justify-content-center text-center">
+                <div class="row text-center align-content-center">
+                    <div class="col my-1">
+                        <div class="form-group">
+                            <label for="exampleTextarea" class="form-label mt-4">Preparation Description:</label>
+                            <textarea class="form-control" id="exampleTextarea" rows="3" @bind="NewRecipe.PrepDescription"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid border-secondary my-1 w-50 align-content-center align-items-center justify-content-center text-center">
+                <div class="row text-center align-content-center">
+                    <div class="col my-1">
+                        <div class="form-group">
+                            <label for="exampleSelect1" class="form-label mt-3">Category:</label>
+                            <select class="form-select" id="exampleSelect1" @bind ="NewRecipe.Category">
+                                    <option>Breakfast</option>
+                                    <option>Dinner</option>
+                                    <option>Lunch</option>
+                                    <option>Supper</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col my-1">
+                        <div class="form-group">
+                            <label for="exampleSelect1" class="form-label mt-3">Diet category:</label>
+                            <select class="form-select" id="exampleSelect1" @bind ="NewRecipe.Diet_Category">
+                                <option>Natural</option>
+                                <option>Vegetarian</option>
+                                <option>Vegan</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col my-5">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" @bind="NewRecipe.LunchBox">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Lunchbox siutable
+                                </label>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid border-secondary my-1 w-50 align-content-center align-items-center justify-content-center text-center">
+                <div class="row text-center align-content-center">
+                    <div class="col my-1">
+                        <button type="button" class="btn btn-secondary btn-outline-dark" @onclick="() => UploadNewRecipe()">Upload Recipe</button>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <h1>Loading</h1>
+        }
+
+    </Authorized>
+    <NotAuthorized>
+        <a href="/Login">
+            <p>You must be logged to upload recipe. Login Here!</p>
+        </a>
+    </NotAuthorized>
+</AuthorizeView>
 @code {
     [Inject]
     public IIngredientService _ingredientService { get; set; }
@@ -174,7 +246,11 @@ else
 
     public async Task UploadNewRecipe()
     {
-        await _recipeService.UploadRecipe(NewRecipe, NewRecipeImg);
+        var uploadedRecipeId = await _recipeService.UploadRecipe(NewRecipe, NewRecipeImg);
+        if(uploadedRecipeId != null)
+        {
+            UriHelper.NavigateTo($"/RecipeDetails/{uploadedRecipeId}");
+        }
     }
 
 }

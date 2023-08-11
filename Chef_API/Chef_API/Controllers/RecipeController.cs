@@ -84,7 +84,7 @@ namespace Chef_API.Controllers
         [HttpPost]
         [Route("Upload")]
         [Authorize]
-        public async Task<ActionResult<GetRecipeDto>> UploadRecipe([FromForm] RecipeDtoWrapped recipeDtoWrapped)
+        public async Task<ActionResult<int>> UploadRecipe([FromForm] RecipeDtoWrapped recipeDtoWrapped)
         {
 
             long maxFileSize = 1024 * 500;
@@ -121,7 +121,7 @@ namespace Chef_API.Controllers
 
                     var uploadedRecipeDto = await _recipeRepository.UploadRecipe(recipeDto, trustedFileNameForFileStorage, User.Identity.Name);
                     
-                    return Ok(uploadedRecipeDto);
+                    return Ok(uploadedRecipeDto.Id);
 
                 }
                 else
