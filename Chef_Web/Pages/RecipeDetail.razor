@@ -1,5 +1,5 @@
-﻿@*@page "/RecipeDetails/{Id:int}"*@
-@page "/RecipeDetails"
+﻿@page "/RecipeDetails/{Id:int}"
+
 @using Chef_Models.Dtos;
 @using Chef_Web.Services.Contracts;
 @layout NoNavMenu;
@@ -13,9 +13,9 @@ else
 {
     <div class="container-fluid">
         <div class="row ">
-            @*<div class="col-4 ">
-                <img src="@($"data:image/jpg;base64,{Recipes.First().RecipeImgBase64}")" alt="Image" style="width: 100%;">
-            </div>*@
+            <div class="col-4 ">
+                <img src="@RecipeImgSource" alt="Image" style="width: 100%;">
+            </div>
             <div class="col">
                 <div class="row my-1">
                     <div class="col">
@@ -24,7 +24,7 @@ else
                 </div>
                 <div class="row my-1">
                     <div class="col">
-                        @*<h4>Chef: @Recipes.First().AuthorName</h4>*@
+                        <h4>Chef: @Recipe.AuthorId</h4>
                     </div>
                 </div>
                 <div class="row my-1">
@@ -39,30 +39,15 @@ else
                                 <h4>Ingredients:</h4>
                             </div>
                         </div>
-                        @*@foreach(ingredient in Recipes.First().)*@
-                        <div class="row ">
-                            <div class="col">
-                                <p class="lead">Ingredient 1 </p>
-                            </div>
-                        </div>
-                        <div class="row ">
-                            <div class="col">
-                                <p class="lead">Ingredient 1 </p>
-                            </div>
-                        </div>
-                        <div class="row ">
-                            <div class="col">
-                                <p class="lead">Ingredient 1 </p>
-                            </div>
-                        </div>
-                        <div class="row ">
-                            <div class="col">
-                                <p class="lead">Ingredient 1 </p>
-                            </div>
-                        </div>
-
-
-                        <div class="row ">
+                        @foreach(var ingredient in Recipe.IngredientDtos)
+                        {
+                           <div class="row ">
+                                <div class="col">
+                                    <p class="lead">@ingredient.Name</p>
+                                </div>
+                            </div> 
+                        }
+                        <div class="row">
                             <div class="col">
                                 <h4>Preparation:</h4>
                             </div>
@@ -85,16 +70,23 @@ else
 
     [Inject]
     public IRecipeService recipeService { get; set; }
+    [Parameter]
+    public int Id { get; set; }
+    public string RecipeImgSource { get; set; }
 
     public GetRecipeDto Recipe { get; set; }
 
     public string ErrorMessage { get; set; }
-    
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            //Recipes = await recipeService.GetRecipes();
+            Recipe = await recipeService.GetRecipe(Id);
+            if(Recipe != null)
+            {
+                RecipeImgSource = $"https://localhost:44355/api/v1/Recipe/RecipePhoto?recipeId={Id}";
+            }
         }
         catch (Exception ex)
         {

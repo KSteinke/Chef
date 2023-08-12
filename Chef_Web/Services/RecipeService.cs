@@ -46,6 +46,41 @@ namespace Chef_Web.Services
             }
         }
 
+        public async Task<GetRecipeDto> GetRecipe(int recipeId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/v1/Recipe/GetRecipe/{recipeId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                    {
+                        return null;
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var content = await response.Content.ReadFromJsonAsync<GetRecipeDto>();
+                        return content;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    throw new Exception(message);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
 
         public async Task<IEnumerable<PostRecipeDto>> GetUserRecipes(string UserName)
         {
@@ -77,9 +112,6 @@ namespace Chef_Web.Services
 
         public async Task<int> UploadRecipe(PostRecipeDto newPostRecipeDto, IBrowserFile newRecipeImg)
         {
-            
-
-
 
                 try
                 {

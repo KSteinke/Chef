@@ -90,6 +90,7 @@ namespace Chef_API.Controllers
         {
             try
             {
+                //TO DO - Add exception handling
                 var content = new MultipartFormDataContent();
                 var recipeImgName = await _recipeRepository.GetRecipeImgName(recipeId);
                 var path = Path.Combine(_config.GetValue<string>("Paths:RecipeImgPath"), recipeImgName);
@@ -98,7 +99,7 @@ namespace Chef_API.Controllers
                 var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
                 
                 var fileContent = new StreamContent(fs);
-                var contentType = "image/jpeg"; // Change this based on the actual image type
+                var contentType = "image/jpeg"; 
                 var file = File(fs, contentType);
                 
                 return file;
