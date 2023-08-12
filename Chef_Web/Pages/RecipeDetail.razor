@@ -4,7 +4,7 @@
 @using Chef_Web.Services.Contracts;
 @layout NoNavMenu;
 
-@if (Recipes == null)
+@if (Recipe == null)
 {
     <h3 class="mb-5">Wait!</h3>
     
@@ -19,7 +19,7 @@ else
             <div class="col">
                 <div class="row my-1">
                     <div class="col">
-                        <h1>@Recipes.First().Name</h1>
+                        <h1>@Recipe.Name</h1>
                     </div>
                 </div>
                 <div class="row my-1">
@@ -29,7 +29,7 @@ else
                 </div>
                 <div class="row my-1">
                     <div class="col">
-                        <p class="lead">@Recipes.First().Description</p>
+                        <p class="lead">@Recipe.Description</p>
                     </div>
                 </div>
                 <div class="row my-1">
@@ -86,7 +86,7 @@ else
     [Inject]
     public IRecipeService recipeService { get; set; }
 
-    public IEnumerable<PostRecipeDto> Recipes { get; set; }
+    public GetRecipeDto Recipe { get; set; }
 
     public string ErrorMessage { get; set; }
     

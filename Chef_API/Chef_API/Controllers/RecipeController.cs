@@ -54,6 +54,35 @@ namespace Chef_API.Controllers
 
         }
 
+        [HttpGet]
+        [Route("GetRecipe/{recipeId}")]
+        public async Task<ActionResult<GetRecipeDto>> GetRecipe(int recipeId)
+        {
+            try
+            {
+                if(recipeId != 0)
+                {
+                    var content = await _recipeRepository.GetRecipe(recipeId);
+                    if(content != null)
+                    {
+                        return Ok(content);
+                    }
+                    else
+                    {
+                        return BadRequest(); //TO DO - Propper exception handling
+                    }
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         [HttpGet]
         [Route("RecipePhoto")]
@@ -117,12 +146,8 @@ namespace Chef_API.Controllers
                     {
                         return BadRequest(); //TO DO - creat propper response
                     }
-                    
-
                     var uploadedRecipeDto = await _recipeRepository.UploadRecipe(recipeDto, trustedFileNameForFileStorage, User.Identity.Name);
-                    
                     return Ok(uploadedRecipeDto.Id);
-
                 }
                 else
                 {
@@ -149,8 +174,7 @@ namespace Chef_API.Controllers
                 Description = "Test",
                 Category = "Test",
                 LunchBox = true,
-                AuthorId = 2,
-                
+                AuthorId = 2, 
             };
             Recipe result = _recipeRepository.UploadRecipeTest(recipe);
             foreach(var ingredient in Ingredients)
@@ -161,14 +185,8 @@ namespace Chef_API.Controllers
                     IngredientId = ingredient.Id,
                     Quantity = 5
                 };
-
                 await _recipeRepository.UploadRecipeIngredient(recipeIngredient);
-                
-                
-
             }
-            
-
             return Ok();
         }
 

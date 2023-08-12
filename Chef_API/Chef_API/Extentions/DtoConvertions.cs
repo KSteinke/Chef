@@ -86,22 +86,52 @@ namespace Chef_API.Extentions
             return recipe;
         }
 
-        public static GetRecipeDto ConvertToDto(this Recipe recipe, IEnumerable<IngredientDto> ingredientDtos)
+        //public static GetRecipeDto ConvertToDto(this Recipe recipe, IEnumerable<IngredientDto> ingredientDtos)
+        //{
+        //    GetRecipeDto getRecipeDto = new GetRecipeDto
+        //    {
+        //        Id = recipe.Id,
+        //        Name = recipe.Name,
+        //        Description = recipe.Description,
+        //        PrepDescription = recipe.PrepDescription,
+        //        Category= recipe.Category,
+        //        LunchBox = recipe.LunchBox,
+        //        Diet_Category = recipe.Diet_Category,
+        //        AuthorId = recipe.AuthorId,
+        //        IngredientDtos = ingredientDtos
+                
+        //    };
+
+        //    return getRecipeDto;
+        //}
+
+        public static GetRecipeDto ConvertToDto(this Recipe recipe)
         {
+            List<IngredientDto> ingredientDtos = new List<IngredientDto>();
+            foreach(var ingredient in recipe.RecipeIngredients)
+            {
+                IngredientDto ingredientDto = new IngredientDto
+                {
+                    Id = ingredient.IngredientId,
+                    Name = ingredient.Ingredient.Name,
+                    Countable = ingredient.Ingredient.Countable,
+                    Quantity = ingredient.Quantity
+                };
+                ingredientDtos.Add(ingredientDto);
+            }
+
             GetRecipeDto getRecipeDto = new GetRecipeDto
             {
                 Id = recipe.Id,
                 Name = recipe.Name,
                 Description = recipe.Description,
                 PrepDescription = recipe.PrepDescription,
-                Category= recipe.Category,
+                Category = recipe.Category,
                 LunchBox = recipe.LunchBox,
                 Diet_Category = recipe.Diet_Category,
                 AuthorId = recipe.AuthorId,
                 IngredientDtos = ingredientDtos
-                
             };
-
             return getRecipeDto;
         }
 

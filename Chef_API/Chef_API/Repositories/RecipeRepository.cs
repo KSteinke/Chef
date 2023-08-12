@@ -20,6 +20,26 @@ namespace Chef_API.Repositories
             return recipes;
         }
 
+        public async Task<GetRecipeDto> GetRecipe(int recipeId)
+        {
+            //var recipe = await _chefDBContext.Recipes.Where(r => r.Id == recipeId).FirstOrDefaultAsync();
+            //if (recipe != null)
+            //{
+            //    var ingredients = await _chefDBContext.RecipeIngredients.Where(r => r.RecipeId == recipe.Id).Select()
+            //}
+
+            var recipe = await _chefDBContext.Recipes.Where(r => r.Id == recipeId).Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).FirstOrDefaultAsync();
+            if(recipe != null)
+            {
+                var getRecipeDto = recipe.ConvertToDto();
+                return getRecipeDto;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public async Task<GetRecipeDto> UploadRecipe(PostRecipeDto postRecipeDto, string recipePhotoUrl, string userName)
         {
             var userId = await _chefDBContext.Chefs.Where(chef => chef.UserName == userName).Select(x => x.Id).FirstAsync();
@@ -43,8 +63,21 @@ namespace Chef_API.Repositories
 
                 }
                 
-                var getRecipeDto = result.Entity.ConvertToDto(postRecipeDto.Ingredients);
-                return getRecipeDto;
+                //var getRecipeDto = result.Entity.ConvertToDto(postRecipeDto.Ingredients);
+                //return getRecipeDto;
+
+                var uploadedRecipe = await _chefDBContext.Recipes.Where(r => r.Id == result.Entity.Id).Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).FirstOrDefaultAsync();
+                if (uploadedRecipe != null)
+                {
+                    var uploadedRecipeDto = uploadedRecipe.ConvertToDto();
+
+                    return uploadedRecipeDto;
+                }
+                else
+                {
+                    return null;
+                }
+                
             }
 
             return null;
