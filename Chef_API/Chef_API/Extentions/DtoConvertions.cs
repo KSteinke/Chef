@@ -88,7 +88,7 @@ namespace Chef_API.Extentions
 
         
 
-        public static GetRecipeDto ConvertToDto(this Recipe recipe, string chefName)
+        public static GetRecipeDto ConvertToDto(this Recipe recipe)
         {
             List<IngredientDto> ingredientDtos = new List<IngredientDto>();
             foreach(var ingredient in recipe.RecipeIngredients)
@@ -112,7 +112,7 @@ namespace Chef_API.Extentions
                 Category = recipe.Category,
                 LunchBox = recipe.LunchBox,
                 Diet_Category = recipe.Diet_Category,
-                AuthorName = chefName,
+                AuthorName = recipe.Author.UserName,
                 IngredientDtos = ingredientDtos
             };
             return getRecipeDto;

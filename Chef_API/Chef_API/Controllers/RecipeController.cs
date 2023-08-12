@@ -29,27 +29,26 @@ namespace Chef_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostRecipeDto>>> GetRecipes()
+        public async Task<ActionResult<IEnumerable<GetRecipeDto>>> GetRecipes([FromQuery] int siteNumber, string searchValue, string category, string dietCategory, bool lunchbox)
         {
-            //try
-            //{
-            //    var recipes = await _recipeRepository.GetRecipes();
-            //    var chefs = await _chefRepository.GetChefs();
-            //    if (recipes == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        var recipesDto = recipes.ConvertoToDto(chefs);
-            //        return Ok(recipesDto);
+            try
+            {
+                var recipes = await _recipeRepository.GetRecipes(siteNumber, searchValue, category, dietCategory, lunchbox);
+                if (recipes == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    
+                    return Ok();
 
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //    return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
-            //}
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
+            }
             return Ok();
 
         }
