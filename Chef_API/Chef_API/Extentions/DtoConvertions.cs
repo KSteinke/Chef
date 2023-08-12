@@ -9,53 +9,6 @@ namespace Chef_API.Extentions
 {
     public static class DtoConvertions
     {
-        /// <summary>
-        /// Converts IEnumerable that cointains Recipe objects to IEnumerable that contains RecipeDto objects
-        /// </summary>
-        /// <param name="recipies">IEnumerable list of Recipe objects</param>
-        /// <returns></returns>
-        //public static IEnumerable<PostRecipeDto> ConvertoToDto(this IEnumerable<Recipe> recipies, IEnumerable<Chef> chefs)
-        //{
-        //    //IEnumerable<RecipeDto> recipesDto = new List<RecipeDto>();
-
-
-        //    IEnumerable<PostRecipeDto> recipesDto = (from recipe in recipies
-        //                                         join chef in chefs
-        //                                         on recipe.AuthorId equals chef.Id
-
-        //                                         select new PostRecipeDto
-        //                                         {
-        //                                             Id = recipe.Id,
-        //                                             Name = recipe.Name,
-        //                                             Description = recipe.Description,
-        //                                             Category = recipe.Category,
-        //                                             LunchBox = recipe.LunchBox,
-        //                                             Diet_Category = recipe.Diet_Category,
-        //                                             AuthorName = chef.UserName,
-        //                                             PrepDescription = recipe.PrepDescription
-        //                                         }).ToList();
-
-        //    return recipesDto;
-
-        //}
-
-        public static string ReadImgByte(string imgUrl)
-        {
-            try
-            {
-                string recipeImgPath = Path.Combine(Config.RecipeImgPath, imgUrl);
-                byte[] recipeImgBytes = File.ReadAllBytes(recipeImgPath);
-                string recipeImgBase64 = Convert.ToBase64String(recipeImgBytes, 0, recipeImgBytes.Length);
-                return recipeImgBase64;
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-        }
 
         public static IEnumerable<IngredientDto> ConverToDto(this IEnumerable<Ingredient> ingredients)
         {
@@ -116,6 +69,17 @@ namespace Chef_API.Extentions
                 IngredientDtos = ingredientDtos
             };
             return getRecipeDto;
+        }
+
+        public static List<GetRecipeDto> ConvertToDto(this IEnumerable<Recipe> recipes)
+        {
+            List<GetRecipeDto> getRecipeDtos = new List<GetRecipeDto>();
+            foreach(var recipe in recipes)
+            {
+               var getRecipeDto = recipe.ConvertToDto();
+               getRecipeDtos.Add(getRecipeDto);
+            }
+            return getRecipeDtos;
         }
 
         public static List<RecipeIngredient> ConverFromDto(this List<IngredientDto> ingredientsDto, int recipeId)

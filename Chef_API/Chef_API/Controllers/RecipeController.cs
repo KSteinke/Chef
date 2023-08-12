@@ -29,6 +29,7 @@ namespace Chef_API.Controllers
         }
 
         [HttpGet]
+        [Route ("GetRecipes")]
         public async Task<ActionResult<IEnumerable<GetRecipeDto>>> GetRecipes([FromQuery] int siteNumber, string searchValue, string category, string dietCategory, bool lunchbox)
         {
             try
@@ -40,16 +41,14 @@ namespace Chef_API.Controllers
                 }
                 else
                 {
-                    
-                    return Ok();
-
+                    return Ok(recipes);
                 }
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
-            return Ok();
+            
 
         }
 
