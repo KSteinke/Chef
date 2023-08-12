@@ -22,16 +22,12 @@ namespace Chef_API.Repositories
 
         public async Task<GetRecipeDto> GetRecipe(int recipeId)
         {
-            //var recipe = await _chefDBContext.Recipes.Where(r => r.Id == recipeId).FirstOrDefaultAsync();
-            //if (recipe != null)
-            //{
-            //    var ingredients = await _chefDBContext.RecipeIngredients.Where(r => r.RecipeId == recipe.Id).Select()
-            //}
-
+            
             var recipe = await _chefDBContext.Recipes.Where(r => r.Id == recipeId).Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).FirstOrDefaultAsync();
-            if(recipe != null)
+            var recipeAuthorName = await _chefDBContext.Chefs.Where(c => c.Id == recipe.AuthorId).Select(c => c.UserName).FirstOrDefaultAsync();
+            if (recipe != null)
             {
-                var getRecipeDto = recipe.ConvertToDto();
+                var getRecipeDto = recipe.ConvertToDto(recipeAuthorName);
                 return getRecipeDto;
             }
             else
@@ -67,9 +63,10 @@ namespace Chef_API.Repositories
                 //return getRecipeDto;
 
                 var uploadedRecipe = await _chefDBContext.Recipes.Where(r => r.Id == result.Entity.Id).Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).FirstOrDefaultAsync();
+                var recipeAuthorName = await _chefDBContext.Chefs.Where(c => c.Id == uploadedRecipe.AuthorId).Select(c => c.UserName).FirstOrDefaultAsync();
                 if (uploadedRecipe != null)
                 {
-                    var uploadedRecipeDto = uploadedRecipe.ConvertToDto();
+                    var uploadedRecipeDto = uploadedRecipe.ConvertToDto(recipeAuthorName);
 
                     return uploadedRecipeDto;
                 }

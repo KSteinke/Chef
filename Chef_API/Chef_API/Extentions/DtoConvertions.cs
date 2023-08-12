@@ -86,26 +86,9 @@ namespace Chef_API.Extentions
             return recipe;
         }
 
-        //public static GetRecipeDto ConvertToDto(this Recipe recipe, IEnumerable<IngredientDto> ingredientDtos)
-        //{
-        //    GetRecipeDto getRecipeDto = new GetRecipeDto
-        //    {
-        //        Id = recipe.Id,
-        //        Name = recipe.Name,
-        //        Description = recipe.Description,
-        //        PrepDescription = recipe.PrepDescription,
-        //        Category= recipe.Category,
-        //        LunchBox = recipe.LunchBox,
-        //        Diet_Category = recipe.Diet_Category,
-        //        AuthorId = recipe.AuthorId,
-        //        IngredientDtos = ingredientDtos
-                
-        //    };
+        
 
-        //    return getRecipeDto;
-        //}
-
-        public static GetRecipeDto ConvertToDto(this Recipe recipe)
+        public static GetRecipeDto ConvertToDto(this Recipe recipe, string chefName)
         {
             List<IngredientDto> ingredientDtos = new List<IngredientDto>();
             foreach(var ingredient in recipe.RecipeIngredients)
@@ -129,7 +112,7 @@ namespace Chef_API.Extentions
                 Category = recipe.Category,
                 LunchBox = recipe.LunchBox,
                 Diet_Category = recipe.Diet_Category,
-                AuthorId = recipe.AuthorId,
+                AuthorName = chefName,
                 IngredientDtos = ingredientDtos
             };
             return getRecipeDto;

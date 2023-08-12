@@ -15,7 +15,7 @@ namespace Chef_Models.Dtos
         public string Category { get; set; }
         public bool LunchBox { get; set; }
         public string? Diet_Category { get; set; }
-        public int AuthorId { get; set; }
+        public string AuthorName { get; set; }
         public IEnumerable<IngredientDto> IngredientDtos { get; set; }
     }
 }
