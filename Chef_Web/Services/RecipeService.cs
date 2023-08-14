@@ -19,18 +19,36 @@ namespace Chef_Web.Services
             this._httpClient = httpClient;
             _tokenManager = tokenManager;
         }
-        public async Task<IEnumerable<PostRecipeDto>> GetRecipes()
+        public async Task<List<PostRecipeDto>> GetRecipes(int siteNumber, string category, string dietCategory, bool lunchbox, string? searchValue)
         {
             try
             {
-                var response = await this._httpClient.GetAsync("api/v1/Recipe");
+                var uriBuilder = new UriBuilder("https://localhost:44355/api/v1/Recipe/GetRecipes");
+
+                // Add query parameters to the UriBuilder
+                var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
+                query["siteNumber"] = siteNumber.ToString();
+                query["category"] = category;
+                query["dietCategory"] = dietCategory;
+                query["lunchbox"] = lunchbox.ToString();
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    query["searchValue"] = searchValue;
+                }
+                uriBuilder.Query = query.ToString();
+
+                // Get the full endpoint address with query parameters
+                var endpointUrl = uriBuilder.ToString();
+
+                var response = await this._httpClient.GetAsync(endpointUrl);
+                
                 if (response.IsSuccessStatusCode)
                 {
                     if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                     {
-                        return Enumerable.Empty<PostRecipeDto>();
+                        return new List<PostRecipeDto>();
                     }
-                    var x = await response.Content.ReadFromJsonAsync<IEnumerable<PostRecipeDto>>();
+                    var x = await response.Content.ReadFromJsonAsync<List<PostRecipeDto>>();
                     return x;
                 }
                 else
@@ -112,10 +130,8 @@ namespace Chef_Web.Services
 
         public async Task<int> UploadRecipe(PostRecipeDto newPostRecipeDto, IBrowserFile newRecipeImg)
         {
-
                 try
                 {
-
                     var content = new MultipartFormDataContent();
                     var fileContent = new StreamContent(newRecipeImg.OpenReadStream());
 
@@ -162,10 +178,6 @@ namespace Chef_Web.Services
                 {
                     throw;
                 }
-            
-
-
-            
         }
     }
 }

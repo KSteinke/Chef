@@ -30,7 +30,7 @@ namespace Chef_API.Controllers
 
         [HttpGet]
         [Route ("GetRecipes")]
-        public async Task<ActionResult<IEnumerable<GetRecipeDto>>> GetRecipes([FromQuery] int siteNumber, string? searchValue, string category, string dietCategory, bool lunchbox)
+        public async Task<ActionResult<IEnumerable<GetRecipeDto>>> GetRecipes([FromQuery] int siteNumber, string category, string dietCategory, bool lunchbox, string? searchValue)
         {
             try
             {

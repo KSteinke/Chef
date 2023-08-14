@@ -5,7 +5,7 @@ namespace Chef_Web.Services.Contracts
 {
     public interface IRecipeService
     {
-        Task<IEnumerable<PostRecipeDto>> GetRecipes();
+        Task<List<PostRecipeDto>> GetRecipes(int siteNumber, string category, string dietCategory, bool lunchbox, string? searchValue);
         Task<GetRecipeDto> GetRecipe(int recipeId);
         Task<int> UploadRecipe(PostRecipeDto newPostRecipeDto, IBrowserFile newRecipeImg);
     }

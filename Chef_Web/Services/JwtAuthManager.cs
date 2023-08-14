@@ -17,8 +17,6 @@ namespace Chef_Web.Services
         {
             AuthToken = jwt;
             Claims = ExtentionMethods.ParseClaimsFromJwt(jwt);
-            
-            
         }
 
         public void LogoutUser()

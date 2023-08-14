@@ -11,7 +11,7 @@ namespace Chef_API.Repositories.Interfaces
         Task<GetRecipeDto> GetRecipe(int recipeId);
         Task<GetRecipeDto> UploadRecipe(PostRecipeDto postRecipeDto, string recipePhotoUrl, string userName);
         Task<string> GetRecipeImgName(int recipeId);
-        //Task UploadRecipeIngredient(RecipeIngredient recipeIngredient);
+        
 
 
     }
