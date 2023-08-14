@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-
+@inject NavigationManager UriHelper
 <div class="page">
     <main>
         @*NavBar*@
@@ -19,8 +19,8 @@
                         </li>
                         <li>
                         <form class="d-flex">
-                            <input class="form-control me-sm-30" type="search" placeholder="Search">
-                            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                            <input class="form-control me-sm-30" type="search" placeholder="Search" @bind ="SearchQuery">
+                            <button class="btn btn-secondary my-2 my-sm-0" type="submit" @onclick="SearchRecipe">Search</button>
                         </form>
                         </li>
                     </ul>
@@ -52,9 +52,11 @@
 </div>
 
 @code{
-
-
-    
+    public string? SearchQuery { get; set; }
+    public void SearchRecipe()
+    {
+        UriHelper.NavigateTo($"/Index/{SearchQuery}");
+    }
 }
 
 

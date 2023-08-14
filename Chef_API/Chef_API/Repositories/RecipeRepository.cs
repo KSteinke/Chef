@@ -105,13 +105,9 @@ namespace Chef_API.Repositories
                 {
                     return null;
                 }
-                
             }
-
             return null;
-
         }
-
 
         public async Task<string> GetRecipeImgName(int recipeId)
         {
@@ -119,25 +115,10 @@ namespace Chef_API.Repositories
             return photoName;
         }
 
-
-        //Tests
-        public Recipe UploadRecipeTest(Recipe recipe)
-        {
-           var result = _chefDBContext.Recipes.Add(recipe);
-           _chefDBContext.SaveChanges();
-            return result.Entity;
-        }
-
-        public List<Ingredient> GetIngredients()
-        {
-            return _chefDBContext.Ingredients.ToList();
-        }
-
-        public async Task UploadRecipeIngredient(RecipeIngredient recipeIngredient)
+        private async Task UploadRecipeIngredient(RecipeIngredient recipeIngredient)
         {
             await _chefDBContext.RecipeIngredients.AddAsync(recipeIngredient);
             await _chefDBContext.SaveChangesAsync();
-
         }
     }
 }

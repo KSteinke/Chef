@@ -30,7 +30,7 @@ namespace Chef_API.Controllers
 
         [HttpGet]
         [Route ("GetRecipes")]
-        public async Task<ActionResult<IEnumerable<GetRecipeDto>>> GetRecipes([FromQuery] int siteNumber, string searchValue, string category, string dietCategory, bool lunchbox)
+        public async Task<ActionResult<IEnumerable<GetRecipeDto>>> GetRecipes([FromQuery] int siteNumber, string? searchValue, string category, string dietCategory, bool lunchbox)
         {
             try
             {
@@ -159,36 +159,6 @@ namespace Chef_API.Controllers
                 throw;
             }
         }
-
-
-
-        [HttpGet]
-        [Route("TEST")]
-        public async Task<IActionResult> PostRecipeTest()
-        {
-            var Ingredients = _recipeRepository.GetIngredients();
-            Recipe recipe = new Recipe
-            {
-                Name = "Test",
-                Description = "Test",
-                Category = "Test",
-                LunchBox = true,
-                AuthorId = 2, 
-            };
-            Recipe result = _recipeRepository.UploadRecipeTest(recipe);
-            foreach(var ingredient in Ingredients)
-            {
-                RecipeIngredient recipeIngredient = new RecipeIngredient()
-                {
-                    RecipeId = result.Id,
-                    IngredientId = ingredient.Id,
-                    Quantity = 5
-                };
-                await _recipeRepository.UploadRecipeIngredient(recipeIngredient);
-            }
-            return Ok();
-        }
-
 
     }
 }

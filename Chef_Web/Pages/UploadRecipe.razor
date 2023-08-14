@@ -27,8 +27,7 @@
                     <div class="col" >
                         <div class="form-group my-1" >
                             <label for="formFile" class="form-label mt-4">Default file input example</label>
-                            @*<input class="form-control" type="file" id="formFile" onchange="@OnInputFileChange">*@
-                            <InputFile OnChange="@OnInputFileChange" />      @*Make it prettier*@
+                            <InputFile OnChange="@OnInputFileChange" />     
                         </div>
                     </div>
                 </div>
@@ -184,11 +183,13 @@
     public string IngredientToAddQty { get; set; }
     public IBrowserFile NewRecipeImg { get; set; }
     public PostRecipeDto NewRecipe = new PostRecipeDto();
-
-
+    
     protected override async Task OnInitializedAsync()
     {
         AvailableIngridients = await _ingredientService.GetIngredients();
+        NewRecipe.Category = "Breakfast";
+        NewRecipe.LunchBox = false;
+        NewRecipe.Diet_Category = "Natural";
     }
 
     public void DeleteIngredient(IngredientDto addedIngredient)
@@ -247,7 +248,7 @@
     public async Task UploadNewRecipe()
     {
         var uploadedRecipeId = await _recipeService.UploadRecipe(NewRecipe, NewRecipeImg);
-        if(uploadedRecipeId != null)
+        if(uploadedRecipeId != 0)
         {
             UriHelper.NavigateTo($"/RecipeDetails/{uploadedRecipeId}");
         }
