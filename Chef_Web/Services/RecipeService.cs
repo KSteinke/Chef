@@ -128,21 +128,35 @@ namespace Chef_Web.Services
             }
         }
 
-        public async Task<int> UploadRecipe(PostRecipeDto newPostRecipeDto, IBrowserFile newRecipeImg)
+        public async Task<int> UploadRecipe(PostRecipeDto newPostRecipeDto, byte[] newRecipeImg)
         {
                 try
                 {
                     var content = new MultipartFormDataContent();
-                    var fileContent = new StreamContent(newRecipeImg.OpenReadStream());
 
-                    fileContent.Headers.ContentType = new MediaTypeHeaderValue(newRecipeImg.ContentType);
+                    var imageStream = new MemoryStream(newRecipeImg);
+                    // Create a StreamContent instance from the image stream
+                    var streamContent = new StreamContent(imageStream);
 
+                    // Set the content type of the stream (e.g., "image/jpeg")
+                    streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+
+                    // Add the StreamContent to the MultipartFormDataContent as a file part
                     content.Add(
-                    content: fileContent,
-                    name: "\"RecipeImg\"",
-                    fileName: "RecipeImg");
+                        content: streamContent,
+                        name: "\"RecipeImg\"", 
+                        fileName: "RecipeImg"); // Add as a part named "file" with filename "image.jpg"
+                    
+                                                                     //var fileContent = new StreamContent(newRecipeImg.OpenReadStream());
 
-                    string recipeDtoJson = System.Text.Json.JsonSerializer.Serialize(newPostRecipeDto);
+                //    fileContent.Headers.ContentType = new MediaTypeHeaderValue(newRecipeImg.ContentType);
+
+                //    content.Add(
+                //    content: fileContent,
+                //    name: "\"RecipeImg\"",
+                //    fileName: "RecipeImg");
+
+                string recipeDtoJson = System.Text.Json.JsonSerializer.Serialize(newPostRecipeDto);
 
                     content.Add(new StringContent(recipeDtoJson), "RecipeDtoJson");
 
@@ -150,7 +164,7 @@ namespace Chef_Web.Services
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
                     var response = await _httpClient.PostAsync("api/v1/Recipe/Upload", content);
-
+                    await imageStream.DisposeAsync();
                     if (response.IsSuccessStatusCode)
                     {
                         if (response.StatusCode == System.Net.HttpStatusCode.NoContent)

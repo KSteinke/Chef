@@ -7,6 +7,6 @@ namespace Chef_Web.Services.Contracts
     {
         Task<List<PostRecipeDto>> GetRecipes(int siteNumber, string category, string dietCategory, bool lunchbox, string? searchValue);
         Task<GetRecipeDto> GetRecipe(int recipeId);
-        Task<int> UploadRecipe(PostRecipeDto newPostRecipeDto, IBrowserFile newRecipeImg);
+        Task<int> UploadRecipe(PostRecipeDto newPostRecipeDto, byte[] newRecipeImg);
     }
 }

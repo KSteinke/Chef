@@ -2,6 +2,9 @@
 @using Chef_Models.Dtos;
 @using Chef_Web.Services.Contracts;
 @using System.Net.Http.Headers;
+@using SixLabors.ImageSharp;
+@using SixLabors.ImageSharp.Formats.Jpeg;
+@using SixLabors.ImageSharp.Processing;
 @inject NavigationManager UriHelper
 
 <AuthorizeView>
@@ -181,9 +184,9 @@
     private byte[] imageData;
     private string imageDataUrl;
     public string IngredientToAddQty { get; set; }
-    public IBrowserFile NewRecipeImg { get; set; }
+    //public IBrowserFile NewRecipeImg { get; set; }
     public PostRecipeDto NewRecipe = new PostRecipeDto();
-    
+
     protected override async Task OnInitializedAsync()
     {
         AvailableIngridients = await _ingredientService.GetIngredients();
@@ -228,9 +231,30 @@
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
-        NewRecipeImg = e.File;
+        //NewRecipeImg = e.File;
         if (e.File != null)
         {
+            //Check of conditions
+            if (e.File.ContentType != "image/jpeg")
+            {
+                // Handle the case where the file is not in JPEG format
+                // For example, show an error message or prevent further processing
+                // You might want to reset NewRecipeImg and other related properties
+                return;
+            }
+
+            // Check if the file size is within the desired boundaries
+            long fileSizeInBytes = e.File.Size;
+            long maxSizeInBytes = 1024 * 512 * 1; // Example maximum size: 1 MB
+
+            if (fileSizeInBytes > maxSizeInBytes)
+            {
+                // Handle the case where the file size is not within the desired boundaries
+                // For example, show an error message or prevent further processing
+                // You might want to reset NewRecipeImg and other related properties
+                return;
+            }
+
             // Read the image data into a byte array
             using (var stream = e.File.OpenReadStream())
             {
@@ -240,6 +264,41 @@
                     imageData = memoryStream.ToArray();
                 }
             }
+
+            // Resize and crop the image using ImageSharp
+            using (var inputStream = new MemoryStream(imageData))
+            using (var outputStream = new MemoryStream())
+            {
+                using (var image = Image.Load(inputStream))
+                {
+                    // Calculate the target dimensions for the square image
+                    int targetSize = 500;
+                    int sideLength = Math.Min(image.Width, image.Height);
+
+                    // Determine the cropping region to create a square
+                    var cropRectangle = new Rectangle(
+                        (image.Width - sideLength) / 2,
+                        (image.Height - sideLength) / 2,
+                        sideLength,
+                        sideLength);
+
+                    // Resize the cropped image to the target size
+                    image.Mutate(x => x
+                        .Crop(cropRectangle)
+                        .Resize(new ResizeOptions
+                            {
+                                Size = new Size(targetSize, targetSize),
+                                Mode = ResizeMode.Max
+                            }));
+
+                    // Save the resized image to the output stream
+                    image.Save(outputStream, new JpegEncoder());
+                }
+
+                // Convert the resized image to a byte array
+                imageData = outputStream.ToArray();
+            }
+
             // Convert the byte array to a Base64-encoded data URL
             imageDataUrl = $"data:{e.File.ContentType};base64,{Convert.ToBase64String(imageData)}";
         }
@@ -247,7 +306,7 @@
 
     public async Task UploadNewRecipe()
     {
-        var uploadedRecipeId = await _recipeService.UploadRecipe(NewRecipe, NewRecipeImg);
+        var uploadedRecipeId = await _recipeService.UploadRecipe(NewRecipe, imageData);
         if(uploadedRecipeId != 0)
         {
             UriHelper.NavigateTo($"/RecipeDetails/{uploadedRecipeId}");
