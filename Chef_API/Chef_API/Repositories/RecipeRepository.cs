@@ -16,31 +16,29 @@ namespace Chef_API.Repositories
         }
         public async Task<IEnumerable<GetRecipeDto>> GetRecipes(int siteNumber, string searchValue, string category, string dietCategory, bool lunchbox)
         {
-            IEnumerable<Recipe> recipes;
-            if (lunchbox == false)
+            //Query construction based on parameter values
+            IQueryable<Recipe> query = _chefDBContext.Recipes;
+            if(category != "All")
             {
-                if (searchValue == "0" || searchValue == "")
-                {
-                    recipes = await _chefDBContext.Recipes.Where(recipe => recipe.Category == category && recipe.Diet_Category == dietCategory).Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).Include(c=>c.Author).Skip(4 * siteNumber).Take(4).ToListAsync();
-                }
-                else
-                {
-                    recipes = await _chefDBContext.Recipes.Where(recipe => recipe.Category == category 
-                    && recipe.Diet_Category == dietCategory 
-                    && (EF.Functions.Like(recipe.Description, "%" + searchValue + "%") || EF.Functions.Like(recipe.Name, "%" + searchValue + "%") || EF.Functions.Like(recipe.PrepDescription, "%" + searchValue + "%"))).Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).Include(c => c.Author).Skip(4 * siteNumber).Take(4).ToListAsync();   
-                }
+                query = query.Where(r => r.Category == category);
             }
-            else
+
+            if(dietCategory != "All")
             {
-                if (searchValue == "0" || searchValue == "")
-                {
-                    recipes = await _chefDBContext.Recipes.Where(recipe => recipe.Category == category && recipe.Diet_Category == dietCategory && recipe.LunchBox == true).Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).Include(c => c.Author).Skip(4 * siteNumber).Take(4).ToListAsync();
-                }
-                else
-                {
-                    recipes = await _chefDBContext.Recipes.Where(recipe => recipe.Category == category && recipe.Diet_Category == dietCategory && recipe.LunchBox == true && (EF.Functions.Like(recipe.Description, "%" + searchValue + "%") || EF.Functions.Like(recipe.Name, "%" + searchValue + "%") || EF.Functions.Like(recipe.PrepDescription, "%" + searchValue + "%"))).Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).Include(c => c.Author).Skip(4 * siteNumber).Take(4).ToListAsync();
-                }
+                query = query.Where(r => r.Diet_Category== dietCategory);
             }
+
+            if(lunchbox != false)
+            {
+                query = query.Where(r => r.LunchBox == lunchbox);
+            }
+
+            if(!string.IsNullOrEmpty(searchValue))
+            {
+                query = query.Where(recipe => (EF.Functions.Like(recipe.Description, "%" + searchValue + "%") || EF.Functions.Like(recipe.Name, "%" + searchValue + "%") || EF.Functions.Like(recipe.PrepDescription, "%" + searchValue + "%")));
+            }
+
+            IEnumerable<Recipe> recipes = await query.Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).Include(c => c.Author).Skip(4 * siteNumber).Take(4).ToListAsync();
 
             if (recipes != null && recipes.Count() > 0)
             {
