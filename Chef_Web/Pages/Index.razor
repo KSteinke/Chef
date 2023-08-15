@@ -117,13 +117,13 @@
                         {
                             <div class="col my-2">
                                 <div class="card d-flex flex-column h-100 table-hover">
-                                    @*<a href="/Recipe/@recipe.Id">
-                                        <img src="" alt="Image" style="width: 100%;">
-                                    </a>*@
+                                        <a href="/Recipe/@recipe.Id">
+                                            <img src=@($"https://localhost:44355/api/v1/Recipe/RecipePhoto?recipeId={recipe.Id}") alt="Image" style="width: 100%;" width="250">
+                                    </a>
                                     <h3 class="card-header h-25">@recipe.Name</h3>
-                                    @*<div class="card-body">
+                                    <div class="card-body">
                                         <h5 class="card-title">Chef: @recipe.AuthorName</h5>
-                                    </div>*@
+                                    </div>
                                     <div class="card-body">
                                         <p class="card-text">@recipe.Description</p>
                                     </div>
@@ -156,7 +156,7 @@
     [Inject]
     public IRecipeService recipeService { get; set; }
 
-    public List<PostRecipeDto> Recipes { get; set; }
+    public List<GetRecipeDto> Recipes { get; set; }
     public string ErrorMessage { get; set; }
 
     //Counter of Recipe Fetch in current session

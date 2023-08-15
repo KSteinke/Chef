@@ -19,7 +19,7 @@ namespace Chef_Web.Services
             this._httpClient = httpClient;
             _tokenManager = tokenManager;
         }
-        public async Task<List<PostRecipeDto>> GetRecipes(int siteNumber, string category, string dietCategory, bool lunchbox, string? searchValue)
+        public async Task<List<GetRecipeDto>> GetRecipes(int siteNumber, string category, string dietCategory, bool lunchbox, string? searchValue)
         {
             try
             {
@@ -46,9 +46,9 @@ namespace Chef_Web.Services
                 {
                     if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                     {
-                        return new List<PostRecipeDto>();
+                        return new List<GetRecipeDto>();
                     }
-                    var x = await response.Content.ReadFromJsonAsync<List<PostRecipeDto>>();
+                    var x = await response.Content.ReadFromJsonAsync<List<GetRecipeDto>>();
                     return x;
                 }
                 else
