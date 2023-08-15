@@ -11,6 +11,7 @@ using Chef_API.Entities;
 using System.Security.Claims;
 using System.Net.Http.Headers;
 using System.IO.Pipes;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Chef_API.Controllers
 {
@@ -48,8 +49,6 @@ namespace Chef_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
-            
-
         }
 
         [HttpGet]
@@ -62,6 +61,35 @@ namespace Chef_API.Controllers
                 {
                     var content = await _recipeRepository.GetRecipe(recipeId);
                     if(content != null)
+                    {
+                        return Ok(content);
+                    }
+                    else
+                    {
+                        return BadRequest(); //TO DO - Propper exception handling
+                    }
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        [HttpGet]
+        [Route("GetRecipes/{userName}")]
+        public async Task<ActionResult<GetRecipeDto>> GetRecipe(string userName)
+        {
+            try
+            {
+                if (!userName.IsNullOrEmpty())
+                {
+                    var content = await _recipeRepository.GetRecipes(userName);
+                    if (content != null)
                     {
                         return Ok(content);
                     }

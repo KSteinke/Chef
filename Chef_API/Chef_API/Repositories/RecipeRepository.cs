@@ -50,8 +50,30 @@ namespace Chef_API.Repositories
                 return Enumerable.Empty<GetRecipeDto>();
             }
             return Enumerable.Empty<GetRecipeDto>();
-
         }
+        public async Task<IEnumerable<GetRecipeDto>> GetRecipes(string userName)
+        {
+            if(await _chefDBContext.Chefs.Where(c => c.UserName == userName).AnyAsync())
+            {
+                var recipes = await _chefDBContext.Recipes.Where(c => c.Author.UserName == userName).Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient).Include(c => c.Author).ToListAsync();
+                if (recipes != null && recipes.Count() > 0)
+                {
+                    var recipesDtos = recipes.ConvertToDto();
+                    if (recipesDtos != null)
+                    {
+                        return recipesDtos;
+                    }
+                    return Enumerable.Empty<GetRecipeDto>();
+                }
+                return Enumerable.Empty<GetRecipeDto>();
+            }
+            else
+            {
+                return Enumerable.Empty<GetRecipeDto>();
+            }
+        }
+
+
 
         public async Task<GetRecipeDto> GetRecipe(int recipeId)
         {

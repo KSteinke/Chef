@@ -172,7 +172,7 @@
     {
         try
         {
-            // Recipes = await recipeService.GetRecipes(SiteNumber, );
+            Recipes = await recipeService.GetRecipes(SiteNumber, Category, DietCategory, LunchBox, SearchQuery);
         }
         catch (Exception ex)
         {

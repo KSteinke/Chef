@@ -25,7 +25,7 @@ namespace Chef_API.Repositories
 
         public async Task<IEnumerable<Ingredient>> GetIngredientsAsync()    //TODO - Mockup version, in future refactor to return only part of recipes
         {
-            return await GetIngredients().ToListAsync();
+            return await GetIngredients().OrderBy(i => i.Name).ToListAsync();
         }
     }
 }
