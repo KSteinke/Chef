@@ -10,13 +10,15 @@ namespace Chef_API.Services.TokenAuthentication
     public class TokenManager : ITokenManager
     {
         private JwtSecurityTokenHandler _tokenHandler;
-        private byte[] secretKey;
+        private readonly IConfiguration _config;
 
-        byte[] TokenKey = Config.JwtTokenKey;
-        public TokenManager()
+
+
+        //byte[] TokenKey = Config.JwtTokenKey;
+        public TokenManager(IConfiguration config)
         {
             _tokenHandler = new JwtSecurityTokenHandler();
-            secretKey = TokenKey;
+            _config = config;
         }
 
         
@@ -27,7 +29,7 @@ namespace Chef_API.Services.TokenAuthentication
                 Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, userName)}),
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(secretKey),
+                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config.GetValue<string>("TokenKeys:JwtTokenKey"))),
                     SecurityAlgorithms.HmacSha256Signature)
             };
 
