@@ -28,35 +28,6 @@ namespace Chef_API
 
             builder.Services.AddTransient<ITokenManager, TokenManager>();
 
-            //builder.Services.AddAuthentication(o =>
-            //{
-            //    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddCookie(x =>
-            //{
-            //    x.Cookie.Name = "Token";
-            //}).AddJwtBearer(o =>
-            //{
-            //    o.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(Config.JwtTokenKey),
-            //        ValidateLifetime = true,
-            //        ValidateAudience = false,
-            //        ValidateIssuer = false,
-            //        ClockSkew = TimeSpan.Zero
-
-            //    };
-            //    o.Events = new JwtBearerEvents
-            //    {
-            //        OnMessageReceived = context =>
-            //        {
-            //            context.Token = context.Request.Cookies["Token"];
-            //            return Task.CompletedTask;
-            //        }
-            //    };
-            //});
-
             builder.Services.AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -73,14 +44,6 @@ namespace Chef_API
                     ClockSkew = TimeSpan.Zero
 
                 };
-            });
-
-
-            //Test policy for Token wrapped in cookie
-            builder.Services.AddAuthorization(o =>
-            {
-                o.AddPolicy("TestPolicy", policy => policy.RequireClaim(ClaimTypes.Name, "Gordon"));
-                
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -111,7 +74,6 @@ namespace Chef_API
             app.UseAuthentication();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

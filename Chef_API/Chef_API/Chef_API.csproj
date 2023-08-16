@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\Chef_Models\Chef_Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Filters\" />
+  </ItemGroup>
+
 </Project>
