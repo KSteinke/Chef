@@ -13,6 +13,7 @@ using System.Net.Http.Headers;
 using System.IO.Pipes;
 using Microsoft.IdentityModel.Tokens;
 using Chef_API.Filters.ActionFilters;
+using System.ComponentModel.DataAnnotations;
 
 namespace Chef_API.Controllers
 {
@@ -32,12 +33,15 @@ namespace Chef_API.Controllers
 
         [HttpGet]
         [Route ("GetRecipes")]
-        public async Task<ActionResult<IEnumerable<GetRecipeDto>>> GetRecipes([FromQuery] int siteNumber, string category, string dietCategory, bool lunchbox, string? searchValue)
+        [SiteNumberValidation]
+        [RecipeCategoryValidation]
+        [RecipeDietCategoryValidation]
+        public async Task<ActionResult<IEnumerable<GetRecipeDto>>> GetRecipes([FromQuery] int siteNumber, string category, string dietCategory, [Required] bool lunchbox, string? searchValue)
         {
             try
             {
                 var recipes = await _recipeRepository.GetRecipes(siteNumber, searchValue, category, dietCategory, lunchbox);
-                if (recipes == null)
+                if (recipes == null) //TO DO - Create Exception handling
                 {
                     return NotFound();
                 }
