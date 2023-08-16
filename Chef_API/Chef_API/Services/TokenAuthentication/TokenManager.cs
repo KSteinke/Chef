@@ -15,15 +15,11 @@ namespace Chef_API.Services.TokenAuthentication
         byte[] TokenKey = Config.JwtTokenKey;
         public TokenManager()
         {
-
             _tokenHandler = new JwtSecurityTokenHandler();
             secretKey = TokenKey;
         }
 
-        /// <summary>
-        /// Generates new JWT
-        /// </summary>
-        /// <returns></returns>
+        
         public string GenerateToken(string userName)
         {
             var tokenDescriptor = new SecurityTokenDescriptor
