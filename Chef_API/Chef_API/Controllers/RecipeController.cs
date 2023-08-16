@@ -84,11 +84,12 @@ namespace Chef_API.Controllers
         }
         [HttpGet]
         [Route("GetRecipes/{userName}")]
+        [UserNameValidation]
         public async Task<ActionResult<GetRecipeDto>> GetRecipe(string userName)
         {
             try
             {
-                if (!userName.IsNullOrEmpty())
+                if (!userName.IsNullOrEmpty()) //TO DO - Added filter for userName validation, here is not needed anymore
                 {
                     var content = await _recipeRepository.GetRecipes(userName);
                     if (content != null)
@@ -114,6 +115,7 @@ namespace Chef_API.Controllers
 
         [HttpGet]
         [Route("RecipePhoto")]
+        [RecipeIdGreaterThanZero]
         public async Task<IActionResult> GetRecipeImg([FromQuery]int recipeId)
         {
             try
@@ -142,6 +144,7 @@ namespace Chef_API.Controllers
         [HttpPost]
         [Route("Upload")]
         [Authorize]
+        [UploadRecipeValidation]
         public async Task<ActionResult<int>> UploadRecipe([FromForm] RecipeDtoWrapped recipeDtoWrapped)
         {
 
@@ -152,19 +155,19 @@ namespace Chef_API.Controllers
                 if (recipeDtoWrapped.RecipeImg.Length > 0 && 
                     recipeDtoWrapped.RecipeImg.Length < maxFileSize && 
                     recipeDtoWrapped.RecipeDtoJson.Length > 0 && 
-                    recipeDtoWrapped.RecipeImg.ContentType == "image/jpeg")
+                    recipeDtoWrapped.RecipeImg.ContentType == "image/jpeg") //TO DO - validation added in UploadRecipeValidation ActionFilter, can be deleted
                 {
 
                     var recipeDtoJson = recipeDtoWrapped.RecipeDtoJson;
 
-                    PostRecipeDto recipeDto = JsonSerializer.Deserialize<PostRecipeDto>(recipeDtoJson);
+                    PostRecipeDto recipeDto = JsonSerializer.Deserialize<PostRecipeDto>(recipeDtoJson); //TO DO - Add custom validation to PostRecipeDto
                     if(recipeDto == null)
                     {
                         return BadRequest();
                     }
                     
-                    //TO DO - add validation for recipe Dto
-
+                    
+                    //Create repository for file storage
                     var trustedFileNameForFileStorage = Path.ChangeExtension(Path.GetRandomFileName(), "jpg");
                     var path = Path.Combine(_config.GetValue<string>("Paths:RecipeImgPath"), trustedFileNameForFileStorage);
 
