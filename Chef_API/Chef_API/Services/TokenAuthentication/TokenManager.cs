@@ -12,12 +12,12 @@ namespace Chef_API.Services.TokenAuthentication
         private JwtSecurityTokenHandler _tokenHandler;
         private byte[] secretKey;
 
-        byte[] x = Config.JwtTokenKey;
+        byte[] TokenKey = Config.JwtTokenKey;
         public TokenManager()
         {
 
             _tokenHandler = new JwtSecurityTokenHandler();
-            secretKey = x;
+            secretKey = TokenKey;
         }
 
         /// <summary>
