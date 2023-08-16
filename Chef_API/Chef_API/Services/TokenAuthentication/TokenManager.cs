@@ -36,9 +36,6 @@ namespace Chef_API.Services.TokenAuthentication
             return jwtString;
         }
 
-        public ClaimsPrincipal VeryfiToken(string token)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

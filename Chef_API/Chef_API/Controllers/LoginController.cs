@@ -22,13 +22,7 @@ namespace Chef_API.Controllers
             _chefRepository = chefRepository;
             _tokenManager = tokenManager;
         }
-        /// <summary>
-        /// Api end point for login function,
-        /// user credentials check
-        /// if passed token is generated
-        /// </summary>
-        /// <param name="userCredentials"></param>
-        /// <returns></returns>
+        
         [HttpPost]
         [Route ("/api/v1/Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto userCredentials)
@@ -49,7 +43,6 @@ namespace Chef_API.Controllers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
