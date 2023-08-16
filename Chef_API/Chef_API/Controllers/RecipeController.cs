@@ -143,7 +143,7 @@ namespace Chef_API.Controllers
         public async Task<ActionResult<int>> UploadRecipe([FromForm] RecipeDtoWrapped recipeDtoWrapped)
         {
 
-            long maxFileSize = 1024 * 500;
+            long maxFileSize = 1024 * 512 * 1;
             
             try
             {
