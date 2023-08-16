@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Net.Http.Headers;
 using System.IO.Pipes;
 using Microsoft.IdentityModel.Tokens;
+using Chef_API.Filters.ActionFilters;
 
 namespace Chef_API.Controllers
 {
@@ -53,11 +54,12 @@ namespace Chef_API.Controllers
 
         [HttpGet]
         [Route("GetRecipe/{recipeId}")]
+        [RecipeIdGreaterThanZero]
         public async Task<ActionResult<GetRecipeDto>> GetRecipe(int recipeId)
         {
             try
             {
-                if(recipeId != 0)
+                if(recipeId != 0) //TO DO - delete this, validation is done by action filter
                 {
                     var content = await _recipeRepository.GetRecipe(recipeId);
                     if(content != null)
