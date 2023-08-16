@@ -148,43 +148,31 @@ namespace Chef_API.Controllers
         public async Task<ActionResult<int>> UploadRecipe([FromForm] RecipeDtoWrapped recipeDtoWrapped)
         {
 
-            long maxFileSize = 1024 * 512 * 1;
-            
             try
             {
-                if (recipeDtoWrapped.RecipeImg.Length > 0 && 
-                    recipeDtoWrapped.RecipeImg.Length < maxFileSize && 
-                    recipeDtoWrapped.RecipeDtoJson.Length > 0 && 
-                    recipeDtoWrapped.RecipeImg.ContentType == "image/jpeg") //TO DO - validation added in UploadRecipeValidation ActionFilter, can be deleted
-                {
+                var recipeDtoJson = recipeDtoWrapped.RecipeDtoJson;
 
-                    var recipeDtoJson = recipeDtoWrapped.RecipeDtoJson;
-
-                    PostRecipeDto recipeDto = JsonSerializer.Deserialize<PostRecipeDto>(recipeDtoJson); //TO DO - Add custom validation to PostRecipeDto
-                    if(recipeDto == null)
-                    {
-                        return BadRequest();
-                    }
-                    
-                    
-                    //Create repository for file storage
-                    var trustedFileNameForFileStorage = Path.ChangeExtension(Path.GetRandomFileName(), "jpg");
-                    var path = Path.Combine(_config.GetValue<string>("Paths:RecipeImgPath"), trustedFileNameForFileStorage);
-
-                    await using FileStream fs = new(path, FileMode.Create);
-                    await recipeDtoWrapped.RecipeImg.CopyToAsync(fs);
-                    
-                    if(!System.IO.File.Exists(path))
-                    {
-                        return BadRequest(); //TO DO - creat propper response
-                    }
-                    var uploadedRecipeDto = await _recipeRepository.UploadRecipe(recipeDto, trustedFileNameForFileStorage, User.Identity.Name);
-                    return Ok(uploadedRecipeDto.Id);
-                }
-                else
+                PostRecipeDto recipeDto = JsonSerializer.Deserialize<PostRecipeDto>(recipeDtoJson); //TO DO - Add custom validation to PostRecipeDto
+                if(recipeDto == null)
                 {
                     return BadRequest();
                 }
+                    
+                    
+                //TO DO - Create repository for file storage
+                var trustedFileNameForFileStorage = Path.ChangeExtension(Path.GetRandomFileName(), "jpg");
+                var path = Path.Combine(_config.GetValue<string>("Paths:RecipeImgPath"), trustedFileNameForFileStorage);
+
+                await using FileStream fs = new(path, FileMode.Create);
+                await recipeDtoWrapped.RecipeImg.CopyToAsync(fs);
+                    
+                if(!System.IO.File.Exists(path))
+                {
+                    return BadRequest(); //TO DO - creat propper response
+                }
+                var uploadedRecipeDto = await _recipeRepository.UploadRecipe(recipeDto, trustedFileNameForFileStorage, User.Identity.Name);
+                return Ok(uploadedRecipeDto.Id);
+                
             }
             catch (Exception)
             {
